@@ -8,6 +8,7 @@ public class GameOverController : MonoBehaviour {
 	public Text gameScoreText;
 	public Text perfectGameBonusText;
 	public Text totalScoreText;
+    public GameObject highScoreDisplay;
 
 private GameController gc;
 
@@ -24,6 +25,11 @@ private GameController gc;
 		}
 			
 		totalScoreText.text = gc.playerScore.ToString();
+
+        if (gc.newHighScore)
+        {
+            highScoreDisplay.active = true;
+        }
 	}
 
 	void Update () {

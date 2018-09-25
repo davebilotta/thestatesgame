@@ -8,7 +8,7 @@ public class DataController : MonoBehaviour {
     private int roundSize = 3;           // This is how many questions per round
 	public int numAnswers = 5;           // This is how many answers we present to user
 
-	private int maxQuestions = 12;  // This is just for testing purposes to get to end of round/game quicker
+	private int maxQuestions = 6;  // This is just for testing purposes to get to end of round/game quicker
 
 	private StatesGameData[] statesData;
 	//private List<StatesGameData> roundData = new List<StatesGameData>();
@@ -28,7 +28,7 @@ public class DataController : MonoBehaviour {
 		LoadGameData();
 		LoadPlayerProgress();
 
-		SceneManager.LoadScene("MenuScreen");
+		SceneManager.LoadScene("MenuScreen2");
 	}
 		
 	public StatesGameData getCurrentRoundData() {
@@ -65,13 +65,17 @@ public class DataController : MonoBehaviour {
 		PlayerPrefs.SetInt("highestScore",playerProgress.highestScore);
 	}
 
-	public void SubmitNewPlayerScore(int newScore) {
+	public bool SubmitNewPlayerScore(int newScore) {
 		// Every time a round end, game controller submits at end 
 		// Check if it's higher than what we have stored 
 		if (newScore > playerProgress.highestScore) {
+            Logger.Log("FOUND A NEW HIGH SCORE OF " + newScore);
 			playerProgress.highestScore = newScore;
 			SavePlayerProgress();
+            return true;
 		}
+        Logger.Log("Score of " + newScore + " is not higher than " + playerProgress.highestScore);
+        return false;
 	}
 		
 	public int GetHighestPlayerScore() {

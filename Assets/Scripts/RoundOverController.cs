@@ -23,7 +23,7 @@ private GameController gc;
 
 	// Use this for initialization
 	void Awake () {
-		
+
 		gc = FindObjectOfType<GameController>();
 
 		roundStartScore.text = gc.roundStartScore.ToString();

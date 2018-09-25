@@ -45,6 +45,8 @@ public class GameController : MonoBehaviour {
 	public int perfectRoundBonus = 100;           // How many bonus points do you get for a perfect round
 	public int perfectGameBonus = 250;            // How many bonus points do you get for a perfect game
 
+    public bool newHighScore;
+
 	void Awake () 
 	{
 		DontDestroyOnLoad(gameObject); 
@@ -65,6 +67,7 @@ public class GameController : MonoBehaviour {
 		playerScore = 0;
 		roundNumber = -1;
 		perfectGame = true;
+        newHighScore = false;
 	}
 
 	public void StartRound() 
@@ -261,15 +264,15 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
-	public void AddGameScore() {
+	public bool AddGameScore() {
 		totalRoundScore = playerScore;
 
 		if (perfectGame) {
 			Logger.Log("Adding perfect game bonus!");
 			playerScore += perfectGameBonus;
-			dataController.SubmitNewPlayerScore(playerScore);
-		} 
-	}
+		}
+        return dataController.SubmitNewPlayerScore(playerScore);
+    }
 
 	public void EndRound() {
 		roundActive = false;
@@ -282,7 +285,7 @@ public class GameController : MonoBehaviour {
 		roundActive = false;
 		gameActive = false;
 		AddRoundScore();
-		AddGameScore();
+		newHighScore = AddGameScore();
 		SceneManager.LoadScene("GameOverScene");
 	}
 
