@@ -13,6 +13,10 @@ public class RoundOverController : MonoBehaviour {
 	public GameObject mainDisplay;
 	public GameObject exitConfirmation;
 
+    public Text roundOverText;
+    public Button endGameButton;
+    public Button nextRoundButton;
+
 	private bool exitConfirmationDialogDisplayed;
 
 private GameController gc;
@@ -65,7 +69,24 @@ private GameController gc;
 	private void ExitConfirmationToggle(bool displayed) {
 		exitConfirmationDialogDisplayed = displayed;
 		exitConfirmation.SetActive(displayed);
+        endGameButton.interactable = !displayed;
+        nextRoundButton.interactable = !displayed;
+
+        float alpha;
+        if (displayed)
+        {
+            alpha = 0.25f;
+        }
+        else
+        {
+            alpha = 1.0f;
+        }
+        Color c = roundOverText.color;
+        c.a = alpha;
+        roundOverText.color = c;
+        
 	}
+
 	public void ReturnToMenu() {
 		SceneManager.LoadScene("MenuScreen");
 	}
