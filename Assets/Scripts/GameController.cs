@@ -20,14 +20,14 @@ public class GameController : MonoBehaviour {
 	private Question[] questionPool;
 
 	public bool gamePaused;
-	private bool roundActive;                     // has the round started
-	private bool gameActive;                      // has the game started
-	public float timeRemaining;                   // how much time is left
+	private bool roundActive;                     // Has the round started?
+	private bool gameActive;                      // Has the game started?
+	public float timeRemaining;                   // How much time is left
 	private int questionIndex = 0;                // what number question are we on
-	public int playerScore;
-	//public int playerScoreDisp;                   // this is the display-value of the score
-	public int roundScore;
-	public int totalRoundScore = 0; 
+	public int playerScore;                       // This is the cumulative player score (what displays at the top)
+	public int roundScore;                        // This is the score for the round 
+    public int roundStartScore;                   // This is the score at the start of the round (playerScore at the end of the previous round with all bonuses added)
+	public int totalRoundScore = 0;               // This is the total score for all rounds (used at end of the game)
 	public Question currentQuestion;              // The Question we are on
 	public List<Question> answers;                // These are the other Answers
 	//private List<GameObject> answerButtonGameObjects = new List<GameObject>();
@@ -63,17 +63,15 @@ public class GameController : MonoBehaviour {
 		Logger.Log("GAME IS NOW ACTIVE");
 		gameActive = true;
 		playerScore = 0;
-		//playerScoreDisp = 0;
 		roundNumber = -1;
 		perfectGame = true;
 	}
 
 	public void StartRound() 
 	{
-		//Logger.Log("START ROUND");
-
 		roundActive = true;
 		roundScore = 0;
+        roundStartScore = playerScore;
 		perfectRound = true;
 		displayController.UpdateScoreText();
 
@@ -211,36 +209,6 @@ public class GameController : MonoBehaviour {
 		return finalList;
 	}
 		
-	/*private void RemoveAllAnswerButtons() {
-		// Go through and return ALL answerButtons to object pool that are in use
-
-		while (answerButtonGameObjects.Count > 0) {
-			// Return to the pool and remove from List 
-			answerButtonObjectPool.ReturnObject(answerButtonGameObjects[0]);
-			answerButtonGameObjects.RemoveAt(0);
-		}
-	}*/
-
-	/*private void RemoveAnswerButton(AnswerButton button) {
-		// At this point we've determined the answer is not correct, so remove it from the list of buttons on screen
-
-		bool done = false;
-		int cnt = 0;
-
-		// can't do a foreach and modify list in the process so use a while
-		while (!done) {
-			GameObject b = answerButtonGameObjects[cnt];
-			//Logger.Log("Evaluating for removal " + b.GetComponent<AnswerButton>().question.name);
-			if (b.GetComponent<AnswerButton>().question.abbreviation == button.question.abbreviation) {
-				int pos = answerButtonGameObjects.IndexOf(b);
-				answerButtonObjectPool.ReturnObject(b);
-				answerButtonGameObjects.RemoveAt(pos);
-				done = true;
-			}
-			cnt++;
-		}
-	} */
-
 	public void OnAnswerButtonClick(AnswerButton button) 
 	{
 		// ***** CORRECT ANSWER *****
@@ -248,9 +216,9 @@ public class GameController : MonoBehaviour {
 			//Logger.Log("CORRECT!");
 
 			// Score for each button left (if you get it on the first try it's 5, if there were 2 incorrect guesses it's 3, etc.)
-			//	roundScore += (answerButtonGameObjects.Count * pointsPerButtonRemaining);
-			roundScore += displayController.GetNumAnswersRemaining() * pointsPerButtonRemaining; 
-			playerScore += roundScore;
+			int score = displayController.GetNumAnswersRemaining() * pointsPerButtonRemaining;
+            roundScore += score;
+            playerScore += score;
 
 			displayController.OnCorrectAnswer();
 
@@ -282,7 +250,6 @@ public class GameController : MonoBehaviour {
 		
 	public void AddRoundScore() {
 		// We're done with the round, so player score is base score of round plus any bonuses 
-		playerScore += roundScore;
 		
 		// Add bonus for each second remaining * bonus per second 
 		secondsRemainingBonus = (Mathf.CeilToInt(timeRemaining) * pointsPerSecondRemaining);
@@ -292,7 +259,6 @@ public class GameController : MonoBehaviour {
 		if (perfectRound) {
 			playerScore += perfectRoundBonus;
 		}
-		//playerScoreDisp = playerScore;
 	}
 
 	public void AddGameScore() {
@@ -303,8 +269,6 @@ public class GameController : MonoBehaviour {
 			playerScore += perfectGameBonus;
 			dataController.SubmitNewPlayerScore(playerScore);
 		} 
-
-		//playerScoreDisp = playerScore;
 	}
 
 	public void EndRound() {
@@ -426,9 +390,9 @@ public class GameController : MonoBehaviour {
 		return highScores;
 	}
 
-	// TODO: Put this into a generic class
+    // TODO: Put this into a generic class
 
-	/*private static List<T> Shuffle<T> (List<T> items) {
+    /*private static List<T> Shuffle<T> (List<T> items) {
 
 		// shuffles a round and returns the value 
 		List<Object> tempList = items;
@@ -442,5 +406,35 @@ public class GameController : MonoBehaviour {
 
 		return finalList;
 	}*/
+
+    /*private void RemoveAllAnswerButtons() {
+    // Go through and return ALL answerButtons to object pool that are in use
+
+    while (answerButtonGameObjects.Count > 0) {
+        // Return to the pool and remove from List 
+        answerButtonObjectPool.ReturnObject(answerButtonGameObjects[0]);
+        answerButtonGameObjects.RemoveAt(0);
+    }
+}*/
+
+    /*private void RemoveAnswerButton(AnswerButton button) {
+		// At this point we've determined the answer is not correct, so remove it from the list of buttons on screen
+
+		bool done = false;
+		int cnt = 0;
+
+		// can't do a foreach and modify list in the process so use a while
+		while (!done) {
+			GameObject b = answerButtonGameObjects[cnt];
+			//Logger.Log("Evaluating for removal " + b.GetComponent<AnswerButton>().question.name);
+			if (b.GetComponent<AnswerButton>().question.abbreviation == button.question.abbreviation) {
+				int pos = answerButtonGameObjects.IndexOf(b);
+				answerButtonObjectPool.ReturnObject(b);
+				answerButtonGameObjects.RemoveAt(pos);
+				done = true;
+			}
+			cnt++;
+		}
+	} */
 
 }

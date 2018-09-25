@@ -5,7 +5,8 @@ using System.Collections;
 
 public class RoundOverController : MonoBehaviour {
 
-	public Text roundScoreText;
+    public Text roundStartScore;
+    public Text roundScore;
 	public Text secondsRemainingBonusText;
 	public Text perfectRoundBonusText;
 	public Text totalScoreText;
@@ -21,8 +22,9 @@ private GameController gc;
 		
 		gc = FindObjectOfType<GameController>();
 
-		roundScoreText.text = gc.roundScore.ToString();
-		secondsRemainingBonusText.text = gc.secondsRemainingBonus.ToString();
+		roundStartScore.text = gc.roundStartScore.ToString();
+        roundScore.text = gc.roundScore.ToString();
+        secondsRemainingBonusText.text = gc.secondsRemainingBonus.ToString();
 		if (gc.perfectRound) {
 			perfectRoundBonusText.text = gc.perfectRoundBonus.ToString() + "";
 		}
