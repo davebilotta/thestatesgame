@@ -35,7 +35,7 @@ public class DisplayController : MonoBehaviour {
 	// TODO: this can eventually go away
 	public void Announce() 
 	{ 
-		Logger.Log("Announcing DisplayController");
+		//Logger.Log("Announcing DisplayController");
 	}
 
 	public void ShowQuestion() {
@@ -153,7 +153,7 @@ public class DisplayController : MonoBehaviour {
 
     public void UpdateScoreText()
     {
-	    scoreText.text = "Score: " + gc.playerScoreDisp.ToString();
+	    scoreText.text = "Score: " + gc.playerScore.ToString();
 		
 	}
 

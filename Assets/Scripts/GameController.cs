@@ -25,7 +25,7 @@ public class GameController : MonoBehaviour {
 	public float timeRemaining;                   // how much time is left
 	private int questionIndex = 0;                // what number question are we on
 	public int playerScore;
-	public int playerScoreDisp;                   // this is the display-value of the score
+	//public int playerScoreDisp;                   // this is the display-value of the score
 	public int roundScore;
 	public int totalRoundScore = 0; 
 	public Question currentQuestion;              // The Question we are on
@@ -63,7 +63,7 @@ public class GameController : MonoBehaviour {
 		Logger.Log("GAME IS NOW ACTIVE");
 		gameActive = true;
 		playerScore = 0;
-		playerScoreDisp = 0;
+		//playerScoreDisp = 0;
 		roundNumber = -1;
 		perfectGame = true;
 	}
@@ -250,7 +250,7 @@ public class GameController : MonoBehaviour {
 			// Score for each button left (if you get it on the first try it's 5, if there were 2 incorrect guesses it's 3, etc.)
 			//	roundScore += (answerButtonGameObjects.Count * pointsPerButtonRemaining);
 			roundScore += displayController.GetNumAnswersRemaining() * pointsPerButtonRemaining; 
-			playerScoreDisp += roundScore;
+			playerScore += roundScore;
 
 			displayController.OnCorrectAnswer();
 
@@ -292,7 +292,7 @@ public class GameController : MonoBehaviour {
 		if (perfectRound) {
 			playerScore += perfectRoundBonus;
 		}
-		playerScoreDisp = playerScore;
+		//playerScoreDisp = playerScore;
 	}
 
 	public void AddGameScore() {
@@ -304,7 +304,7 @@ public class GameController : MonoBehaviour {
 			dataController.SubmitNewPlayerScore(playerScore);
 		} 
 
-		playerScoreDisp = playerScore;
+		//playerScoreDisp = playerScore;
 	}
 
 	public void EndRound() {
