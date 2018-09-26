@@ -485,6 +485,29 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 22446960, guid: ca7b8df153bb8a44f9ce357f23c1bc19,
     type: 2}
   m_PrefabInternal: {fileID: 314275123}
+--- !u!1 &314275125 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 170616, guid: ca7b8df153bb8a44f9ce357f23c1bc19,
+    type: 2}
+  m_PrefabInternal: {fileID: 314275123}
+--- !u!95 &314275126
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 314275125}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &459525886
 Prefab:
   m_ObjectHideFlags: 0
@@ -611,7 +634,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d78eb885a4d67664da96ecbc11bed3bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  logoAnimator: {fileID: 0}
+  logoAnimator: {fileID: 314275126}
+  UIAnimators: []
 --- !u!224 &479890569
 RectTransform:
   m_ObjectHideFlags: 0

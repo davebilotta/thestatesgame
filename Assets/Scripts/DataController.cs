@@ -28,8 +28,11 @@ public class DataController : MonoBehaviour {
 		LoadGameData();
 		LoadPlayerProgress();
 
-		SceneManager.LoadScene("MenuScreen2");
-	}
+        // TODO: Should this get moved elsewhere?
+        //SceneManager.LoadScene("MenuScreen");
+        SceneManager.LoadScene("MenuScreenWithTransitions");
+
+    }
 		
 	public StatesGameData getCurrentRoundData() {
 		// for now we'll only have one item 
