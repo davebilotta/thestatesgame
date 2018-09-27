@@ -5,8 +5,8 @@ using UnityEngine.SceneManagement;
 public class MenuScreenController : MonoBehaviour {
 			
 	public void LoadNextMenuScene() {
-        //SceneManager.LoadScene("MenuScreen2");
-        SceneManager.LoadScene("MenuScreenWithTransitions2");
+        SceneManager.LoadScene("MenuScreen2");
+        //SceneManager.LoadScene("MenuScreenWithTransitions2");
 	}
 
 	public void LoadHighScores() {

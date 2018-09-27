@@ -29,8 +29,8 @@ public class DataController : MonoBehaviour {
 		LoadPlayerProgress();
 
         // TODO: Should this get moved elsewhere?
-        //SceneManager.LoadScene("MenuScreen");
-        SceneManager.LoadScene("MenuScreenWithTransitions");
+        SceneManager.LoadScene("MenuScreen");
+        //SceneManager.LoadScene("MenuScreenWithTransitions");
 
     }
 		

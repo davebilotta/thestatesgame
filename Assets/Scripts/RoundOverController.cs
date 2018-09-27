@@ -5,11 +5,30 @@ using System.Collections;
 
 public class RoundOverController : MonoBehaviour {
 
+    // These are the Text components 
     public Text roundStartScore;
     public Text roundScore;
 	public Text secondsRemainingBonusText;
 	public Text perfectRoundBonusText;
 	public Text totalScoreText;
+
+    // These are the Int equivalents for counting up 
+    private double roundStartScoreNum = 0;
+    private int roundStartScoreNumMax;
+    private double roundStartScoreNumInc;
+    private double roundScoreNum = 0;
+    private int roundScoreNumMax;
+    private double roundScoreNumInc;
+    private double secondsRemainingBonusNum = 0;
+    private int secondsRemainingBonusNumMax;
+    private double secondsRemainingBonusNumInc;
+    private double perfectRoundBonusNum = 0;
+    private int perfectRoundBonusNumMax;
+    private double perfectRoundBonusNumInc;
+    private double totalScoreNum = 0;
+    private int totalScoreNumMax;
+    private double totalScoreNumInc;
+
 	public GameObject mainDisplay;
 	public GameObject exitConfirmation;
 
@@ -18,29 +37,108 @@ public class RoundOverController : MonoBehaviour {
     public Button nextRoundButton;
 
 	private bool exitConfirmationDialogDisplayed;
+    private bool scoreCountUpComplete;            // Flag that when we're done with the round
+    private float scoreCountUpTick = 0f;          // Where we're currently at in the counter
+    private float scoreCountUpLength = 1.5f;      // How long will it take to count up our score?
+
+    private int framesRequired;
+    private int frameCount = 0;
 
 private GameController gc;
 
-	// Use this for initialization
-	void Awake () {
+    // Use this for initialization
+    void Awake()
+    {
+        gc = FindObjectOfType<GameController>();
+        scoreCountUpComplete = false;
 
-		gc = FindObjectOfType<GameController>();
+        // TODO: This may need some work - could potentially get a slow update if last frame was slow 
+        //       Have a hard-coded value? 
+        
+        framesRequired = (int)(scoreCountUpLength / Time.deltaTime);
+        Logger.Log("Frames required is " + framesRequired);
 
-		roundStartScore.text = gc.roundStartScore.ToString();
-        roundScore.text = gc.roundScore.ToString();
-        secondsRemainingBonusText.text = gc.secondsRemainingBonus.ToString();
-		if (gc.perfectRound) {
-			perfectRoundBonusText.text = gc.perfectRoundBonus.ToString() + "";
-		}
-		else {
-			perfectRoundBonusText.text = "0";
-		}
-			
-		totalScoreText.text = gc.playerScore.ToString();
-	}
+        // Round Start Score 
+        roundStartScoreNumMax = gc.roundStartScore;
+        roundStartScoreNumInc = ((double)roundStartScoreNumMax / framesRequired);
+
+        // Round Score 
+        roundScoreNumMax = gc.roundScore;
+        roundScoreNumInc = ((double)roundScoreNumMax / framesRequired);
+
+        // Seconds Remaining
+        secondsRemainingBonusNumMax = gc.secondsRemainingBonus;
+        secondsRemainingBonusNumInc = ((double)secondsRemainingBonusNumMax / framesRequired);
+
+        // Perfect Round
+        if (gc.perfectRound)
+        {
+            perfectRoundBonusNumMax = gc.perfectRoundBonus;
+            perfectRoundBonusNumInc = ((double)perfectRoundBonusNumMax / framesRequired);
+
+        }
+        else
+        {
+            perfectRoundBonusNumMax = 0;
+            perfectRoundBonusNumInc = 0;
+
+        }
+
+        // Total Score 
+        totalScoreNumMax = gc.playerScore;
+        totalScoreNumInc = ((double)totalScoreNumMax / framesRequired);
+
+        Logger.Log("Here are the numbers");
+        Logger.Log("MAX: " + roundStartScoreNumMax + "/" +
+            roundScoreNumMax + "/" +
+            secondsRemainingBonusNumMax + "/" +
+            perfectRoundBonusNumMax + "/" +
+            totalScoreNumMax);
+
+        Logger.Log("INC: " + roundStartScoreNumInc + "/" +
+                roundScoreNumInc + "/" +
+                secondsRemainingBonusNumInc + "/" +
+                perfectRoundBonusNumInc + "/" +
+                totalScoreNumInc);
+    }
 
 	// Update is called once per frame
-	void Update () {}
+	void Update () {
+        if (!scoreCountUpComplete)
+        {
+            //if (scoreCountUpTick < scoreCountUpLength)
+            if (frameCount < framesRequired) 
+            {
+                scoreCountUpTick += Time.deltaTime;
+                frameCount++;
+
+                // Increment the numbers
+                roundStartScoreNum += roundStartScoreNumInc;
+                roundScoreNum += roundScoreNumInc;
+                secondsRemainingBonusNum += secondsRemainingBonusNumInc;
+                perfectRoundBonusNum += perfectRoundBonusNumInc;
+                totalScoreNum += totalScoreNumInc;
+
+                // Update the text 
+                roundStartScore.text = ((int)roundStartScoreNum).ToString();
+                roundScore.text = ((int)roundScoreNum).ToString();
+                secondsRemainingBonusText.text = ((int)secondsRemainingBonusNum).ToString();
+                perfectRoundBonusText.text = ((int)perfectRoundBonusNum).ToString();
+                totalScoreText.text = ((int)totalScoreNum).ToString();
+            }
+            else
+            {
+                scoreCountUpComplete = true;
+
+                // Set these to their final values
+                roundStartScore.text = roundStartScoreNumMax.ToString();
+                roundScore.text = roundScoreNumMax.ToString();
+                secondsRemainingBonusText.text = secondsRemainingBonusNumMax.ToString();
+                perfectRoundBonusText.text = perfectRoundBonusNumMax.ToString();
+                totalScoreText.text = totalScoreNumMax.ToString();
+            }
+        }
+    }
 
 	public void OnEndGameButtonClick() {
 		if (!exitConfirmationDialogDisplayed) {
@@ -56,12 +154,10 @@ private GameController gc;
 	}
 
 	public void OnNoButtonClick() {
-		//mainDisplay.SetActive(true);
 		ExitConfirmationToggle(false);
 	}
 
 	public void OnYesButtonClick() {
-		//mainDisplay.SetActive(true);
 		ExitConfirmationToggle(false);
 		ReturnToMenu();
 	}
