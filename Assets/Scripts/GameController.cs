@@ -35,7 +35,7 @@ public class GameController : MonoBehaviour {
 	public enum MyGameMode {States,Capitals};
 	public MyGameMode mode;
 
-	private int roundNumber = -1;                 // which round out of (1-N) are we on
+	public int roundNumber = -1;                 // which round out of (1-N) are we on
 	private int roundTimeLimit = 60;              // how long will each round last, in seconds
 	private int pointsPerSecondRemaining = 1;     // how many points does each remaining second get you 
 	private int pointsPerButtonRemaining = 10;    // how many points does each correct answer get you
@@ -87,6 +87,8 @@ public class GameController : MonoBehaviour {
 		
 		// TODO Need to rename so it doesn't say "new"
 		currentRoundData = dataController.getCurrentRoundDataNew(roundNumber);
+
+        displayController.UpdateRoundText();
 
 		questionPool = currentRoundData; // store questions we're going to be asking
 

@@ -54,8 +54,9 @@ private GameController gc;
 
         // TODO: This may need some work - could potentially get a slow update if last frame was slow 
         //       Have a hard-coded value? 
-        
-        framesRequired = (int)(scoreCountUpLength / Time.deltaTime);
+
+        //framesRequired = (int)(scoreCountUpLength / Time.deltaTime);
+        framesRequired = 90;
         Logger.Log("Frames required is " + framesRequired);
 
         // Round Start Score 

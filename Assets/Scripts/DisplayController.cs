@@ -10,6 +10,7 @@ public class DisplayController : MonoBehaviour {
 	public Text questionText;
 	public Image questionImage;
 	public Text scoreText;
+    public Text roundText;
 	public Text timeRemainingText;
 	public GameObject pauseDisplay;
 
@@ -23,7 +24,7 @@ public class DisplayController : MonoBehaviour {
 	}
 
 	void Start () {
-	
+	    
 	}
 	
 	void Update () 
@@ -132,9 +133,6 @@ public class DisplayController : MonoBehaviour {
 		return questionList;
 	}*/
 
-	private void UpdateTimeRemainingDisplay() {
-		timeRemainingText.text = "Time Remaining: " + Mathf.Round(gc.timeRemaining).ToString();
-	}
 
 	private void RemoveAllAnswerButtons() {
 		// Go through and return ALL answerButtons to object pool that are in use
@@ -153,9 +151,20 @@ public class DisplayController : MonoBehaviour {
 
     public void UpdateScoreText()
     {
-	    scoreText.text = "Score: " + gc.playerScore.ToString();
-		
-	}
+        scoreText.text = "Score: " + gc.playerScore.ToString();
+      
+    }
+
+    public void UpdateRoundText()
+    {
+        roundText.text = ("ROUND: " + (gc.roundNumber + 1)).ToString();
+    }
+
+
+    private void UpdateTimeRemainingDisplay()
+    {
+        timeRemainingText.text = "Time Remaining: " + Mathf.Round(gc.timeRemaining).ToString();
+    }
 
     public void OnIncorrectAnswer(AnswerButton button) {
 		ShowIncorrectAnimation();
