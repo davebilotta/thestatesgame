@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using System;
 
 public class DisplayController : MonoBehaviour {
@@ -12,32 +13,50 @@ public class DisplayController : MonoBehaviour {
 	public Text scoreText;
     public Text roundText;
 	public Text timeRemainingText;
-	public GameObject pauseDisplay;
+
+    public Text scoreAnimationText;
+    public GameObject scoreAnimationDisplay;
+    private bool scoreAnimationActive;
+    private float scoreAnimationFadeDelay = 0.01f;
+
+    public GameObject pauseDisplay;
 
 	public SimpleObjectPool answerButtonObjectPool;
 	public Transform answerButtonParent;
 	private List<GameObject> answerButtonGameObjects = new List<GameObject>();
+    
 
 	void Awake() {
-		Logger.Log("DISPLAY CONTROLLER AWAKE");
+		//Logger.Log("DISPLAY CONTROLLER AWAKE");
 		gc = FindObjectOfType<GameController>();
 	}
 
 	void Start () {
-	    
+        
 	}
 	
 	void Update () 
 	{
-		// This updates all of the UI 
 		UpdateTimeRemainingDisplay();
-	}
+        UpdateScoreAnimation();
+   	}
 
-	// TODO: this can eventually go away
-	public void Announce() 
-	{ 
-		//Logger.Log("Announcing DisplayController");
-	}
+    public void UpdateScoreText()
+    {
+        scoreText.text = gc.playerScore.ToString() + " Points";
+
+    }
+
+    public void UpdateRoundText()
+    {
+        roundText.text = ("ROUND: " + (gc.roundNumber + 1)).ToString();
+    }
+
+
+    private void UpdateTimeRemainingDisplay()
+    {
+        timeRemainingText.text = "Time Remaining: " + Mathf.Round(gc.timeRemaining).ToString();
+    }
 
 	public void ShowQuestion() {
 
@@ -106,7 +125,130 @@ public class DisplayController : MonoBehaviour {
 		//roundActive = true;
 	}
 
-	/*public List<Question> FindOtherQuestions(Question q,int n) {
+	private void RemoveAllAnswerButtons() {
+		// Go through and return ALL answerButtons to object pool that are in use
+
+		while (answerButtonGameObjects.Count > 0) {
+			// Return to the pool and remove from List 
+			answerButtonObjectPool.ReturnObject(answerButtonGameObjects[0]);
+			answerButtonGameObjects.RemoveAt(0);
+		}
+	}
+
+	public void OnCorrectAnswer(int score) {
+		UpdateScoreText();
+        ActivateScoreAnimation(score); 
+	}
+       
+    public void UpdateScoreAnimation()
+    {
+        if (scoreAnimationActive)
+        {
+            Color c = scoreAnimationText.color;
+            //Logger.Log("Color's alpha is " + c.a);
+
+            if (c.a > 0f)
+            {
+                c.a -= scoreAnimationFadeDelay;
+                scoreAnimationText.color = c;
+            }
+            else
+            {
+                InactivateScoreAnimation();                
+            }           
+        }
+
+    }
+
+    public void ActivateScoreAnimation(int score)
+    {
+        scoreAnimationText.text = "+" + score.ToString();
+        Color c = scoreAnimationText.color;
+        c.a = 1.0f;
+        scoreAnimationText.color = c;
+        
+        // Check this in case user keeps answering quickly while animation is active. 
+        // Probably overkill but just leave it 
+        if (!scoreAnimationActive)
+        {
+            scoreAnimationActive = true;
+            scoreAnimationDisplay.SetActive(true);
+        }
+    }
+
+    public void InactivateScoreAnimation()
+    {
+        if (scoreAnimationActive)
+        {
+            scoreAnimationActive = false;
+            scoreAnimationDisplay.SetActive(false);
+        }
+    }
+
+    public void OnIncorrectAnswer(AnswerButton button) {
+		//ActivateScoreAnimation();
+		RemoveAnswerButton(button);
+	}
+
+	public int GetNumAnswersRemaining() 
+	{ 
+		return answerButtonGameObjects.Count;
+	}
+
+	private void RemoveAnswerButton(AnswerButton button) {
+		// At this point we've determined the answer is not correct, so remove it from the list of buttons on screen
+
+		bool done = false;
+		int cnt = 0;
+
+		// can't do a foreach and modify list in the process so use a while
+		while (!done) {
+			GameObject b = answerButtonGameObjects[cnt];
+			if (b.GetComponent<AnswerButton>().question.abbreviation == button.question.abbreviation) {
+				int pos = answerButtonGameObjects.IndexOf(b);
+				answerButtonObjectPool.ReturnObject(b);
+				answerButtonGameObjects.RemoveAt(pos);
+				done = true;
+			}
+			cnt++;
+		}
+	}
+
+	public void ActivateCorrectAnimation() {
+       
+    }
+
+	public void ActivateIncorrectAnimation() {
+
+	}
+
+	public void GamePause(bool gamePaused) {
+		pauseDisplay.SetActive(gamePaused);
+	}	
+
+	private string getImagePath(Question q) {
+		string imagePath = "";
+		if (gc.GetGameMode() == "states") {
+			imagePath = "raw/state_images/";
+		}
+		else {
+			imagePath = "raw/state_images_capital/";
+		}
+		string[] n = q.name.ToLower().Split();
+		foreach (string s in n) {
+			imagePath += s; 		
+		}
+		return imagePath;
+	}
+
+    // TODO: this can eventually go away
+    public void Announce()
+    {
+        //Logger.Log("Announcing DisplayController");
+    }
+
+
+    /*public List<Question> FindOtherQuestions(Question q,int n) {
 		// Given a question, find n other Questions that do not match
 
 		List<Question> fullQuestionList = dataController.questionData;
@@ -132,95 +274,4 @@ public class DisplayController : MonoBehaviour {
 
 		return questionList;
 	}*/
-
-
-	private void RemoveAllAnswerButtons() {
-		// Go through and return ALL answerButtons to object pool that are in use
-
-		while (answerButtonGameObjects.Count > 0) {
-			// Return to the pool and remove from List 
-			answerButtonObjectPool.ReturnObject(answerButtonGameObjects[0]);
-			answerButtonGameObjects.RemoveAt(0);
-		}
-	}
-
-	public void OnCorrectAnswer() {
-		UpdateScoreText();
-		ShowCorrectAnimation();
-	}
-
-    public void UpdateScoreText()
-    {
-        scoreText.text = "Score: " + gc.playerScore.ToString();
-      
-    }
-
-    public void UpdateRoundText()
-    {
-        roundText.text = ("ROUND: " + (gc.roundNumber + 1)).ToString();
-    }
-
-
-    private void UpdateTimeRemainingDisplay()
-    {
-        timeRemainingText.text = "Time Remaining: " + Mathf.Round(gc.timeRemaining).ToString();
-    }
-
-    public void OnIncorrectAnswer(AnswerButton button) {
-		ShowIncorrectAnimation();
-		RemoveAnswerButton(button);
-	}
-
-	public int GetNumAnswersRemaining() 
-	{ 
-		return answerButtonGameObjects.Count;
-	}
-
-	private void RemoveAnswerButton(AnswerButton button) {
-		// At this point we've determined the answer is not correct, so remove it from the list of buttons on screen
-
-		bool done = false;
-		int cnt = 0;
-
-		// can't do a foreach and modify list in the process so use a while
-		while (!done) {
-			GameObject b = answerButtonGameObjects[cnt];
-			//Logger.Log("Evaluating for removal " + b.GetComponent<AnswerButton>().question.name);
-			if (b.GetComponent<AnswerButton>().question.abbreviation == button.question.abbreviation) {
-				int pos = answerButtonGameObjects.IndexOf(b);
-				answerButtonObjectPool.ReturnObject(b);
-				answerButtonGameObjects.RemoveAt(pos);
-				done = true;
-			}
-			cnt++;
-		}
-	}
-
-	public void ShowCorrectAnimation() {
-
-	}
-
-	public void ShowIncorrectAnimation() {
-
-	}
-
-	public void GamePause(bool gamePaused) {
-		pauseDisplay.SetActive(gamePaused);
-	}
-	
-
-	private string getImagePath(Question q) {
-		string imagePath = "";
-		if (gc.GetGameMode() == "states") {
-			imagePath = "raw/state_images/";
-		}
-		else {
-			imagePath = "raw/state_images_capital/";
-		}
-		string[] n = q.name.ToLower().Split();
-		foreach (string s in n) {
-			imagePath += s; 		
-		}
-		return imagePath;
-	}
 }

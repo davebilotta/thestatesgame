@@ -19,8 +19,9 @@ public class MenuScreenController : MonoBehaviour {
 	public void PlayStatesGame() {
 		GameController gameController = FindObjectOfType<GameController>();
 		gameController.StartGame();
-		SceneManager.LoadScene("StatesGameScene");
-		}
+        //SceneManager.LoadScene("StatesGameScene");
+        SceneManager.LoadScene("StatesGameSceneLandscape");
+    }
 
 	public void PlayCapitalsGame() {
 		GameController gameController = FindObjectOfType<GameController>();

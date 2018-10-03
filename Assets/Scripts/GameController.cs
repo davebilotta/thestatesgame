@@ -76,7 +76,6 @@ public class GameController : MonoBehaviour {
 		roundScore = 0;
         roundStartScore = playerScore;
 		perfectRound = true;
-		displayController.UpdateScoreText();
 
 		// TODO: These two lines can be removed 
 		//Logger.Log("MY Display Controller is " + displayController.ToString());
@@ -225,7 +224,7 @@ public class GameController : MonoBehaviour {
             roundScore += score;
             playerScore += score;
 
-			displayController.OnCorrectAnswer();
+			displayController.OnCorrectAnswer(score);
 
 			// Do we still have questions left?
 			if (questionPool.Length > questionIndex + 1) {
@@ -348,7 +347,7 @@ public class GameController : MonoBehaviour {
 					perfectRound = false;
 					perfectGame = false;
 					if (roundNumber >= (dataController.roundData.Count-1)) {
-					EndGame();
+					    EndGame();
 					}	
 					else {
 						EndRound();

@@ -169,6 +169,7 @@ public class DataController : MonoBehaviour {
 	}
 
 	void Update () {
+
 	}
 
 	private void LoadHighScoresData() {
