@@ -74,6 +74,7 @@ public class GameController : MonoBehaviour {
 	{
 		roundActive = true;
 		roundScore = 0;
+		roundScore = 0;
         roundStartScore = playerScore;
 		perfectRound = true;
 
@@ -292,6 +293,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void ReturnToMenu() {
+        // TODO: This needs changes to use landscape mode
 		SceneManager.LoadScene("MenuScreen");
 	}
 

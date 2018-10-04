@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class MenuScreenController : MonoBehaviour {
 			
 	public void LoadNextMenuScene() {
-        SceneManager.LoadScene("MenuScreen2");
+        SceneManager.LoadScene("MenuScreen2Landscape");
         //SceneManager.LoadScene("MenuScreenWithTransitions2");
 	}
 

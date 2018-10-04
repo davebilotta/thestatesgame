@@ -57,8 +57,7 @@ private GameController gc;
 
         //framesRequired = (int)(scoreCountUpLength / Time.deltaTime);
         framesRequired = 90;
-        Logger.Log("Frames required is " + framesRequired);
-
+        
         // Round Start Score 
         roundStartScoreNumMax = gc.roundStartScore;
         roundStartScoreNumInc = ((double)roundStartScoreNumMax / framesRequired);
@@ -89,7 +88,7 @@ private GameController gc;
         totalScoreNumMax = gc.playerScore;
         totalScoreNumInc = ((double)totalScoreNumMax / framesRequired);
 
-        Logger.Log("Here are the numbers");
+        /*Logger.Log("Here are the numbers");
         Logger.Log("MAX: " + roundStartScoreNumMax + "/" +
             roundScoreNumMax + "/" +
             secondsRemainingBonusNumMax + "/" +
@@ -100,7 +99,7 @@ private GameController gc;
                 roundScoreNumInc + "/" +
                 secondsRemainingBonusNumInc + "/" +
                 perfectRoundBonusNumInc + "/" +
-                totalScoreNumInc);
+                totalScoreNumInc); */
     }
 
 	// Update is called once per frame

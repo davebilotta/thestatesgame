@@ -29,7 +29,7 @@ public class DataController : MonoBehaviour {
 		LoadPlayerProgress();
 
         // TODO: Should this get moved elsewhere?
-        SceneManager.LoadScene("MenuScreen");
+        SceneManager.LoadScene("MenuScreenLandscape");
         //SceneManager.LoadScene("MenuScreenWithTransitions");
 
     }
