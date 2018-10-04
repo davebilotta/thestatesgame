@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class GameController : MonoBehaviour {
 
-	private DataController dataController;
+	public DataController dataController;
 
 	public DisplayController displayController;
 
@@ -36,7 +36,7 @@ public class GameController : MonoBehaviour {
 	public MyGameMode mode;
 
 	public int roundNumber = -1;                 // which round out of (1-N) are we on
-	private int roundTimeLimit = 60;              // how long will each round last, in seconds
+	private int roundTimeLimit = 6000;              // how long will each round last, in seconds
 	private int pointsPerSecondRemaining = 1;     // how many points does each remaining second get you 
 	private int pointsPerButtonRemaining = 10;    // how many points does each correct answer get you
 	public bool perfectRound;                     // gets initialized in StartRound
@@ -88,6 +88,7 @@ public class GameController : MonoBehaviour {
 		currentRoundData = dataController.getCurrentRoundDataNew(roundNumber);
 
         displayController.UpdateRoundText();
+        displayController.UpdateScoreText();
 
 		questionPool = currentRoundData; // store questions we're going to be asking
 

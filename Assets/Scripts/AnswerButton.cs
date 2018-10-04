@@ -17,6 +17,7 @@ public class AnswerButton : MonoBehaviour {
 	public void Setup(AnswerData data) {
 		answerData = data;
 		answerText.text = answerData.answerText;
+        this.transform.localScale = new Vector3(1, 1, 1);
 	}
 
 	public void OnClick() {

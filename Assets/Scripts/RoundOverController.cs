@@ -149,9 +149,10 @@ private GameController gc;
 
 	public void NextRound() {
 		if (!exitConfirmationDialogDisplayed) {
-			SceneManager.LoadScene("StatesGameScene");
-		//gc.StartRound();
-		}
+            //SceneManager.LoadScene("StatesGameScene");
+            SceneManager.LoadScene("StatesGameSceneLandscape");
+            //gc.StartRound();
+        }
 	}
 
 	public void OnNoButtonClick() {

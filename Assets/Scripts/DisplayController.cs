@@ -43,19 +43,19 @@ public class DisplayController : MonoBehaviour {
 
     public void UpdateScoreText()
     {
-        scoreText.text = gc.playerScore.ToString() + " Points";
+        scoreText.text = gc.playerScore.ToString();
 
     }
 
     public void UpdateRoundText()
     {
-        roundText.text = ("ROUND: " + (gc.roundNumber + 1)).ToString();
+        roundText.text = "Round " + (gc.roundNumber + 1) + " of " + gc.dataController.roundData.Count;
     }
 
 
     private void UpdateTimeRemainingDisplay()
     {
-        timeRemainingText.text = "Time Remaining: " + Mathf.Round(gc.timeRemaining).ToString();
+        timeRemainingText.text = Mathf.Round(gc.timeRemaining).ToString();
     }
 
 	public void ShowQuestion() {
@@ -106,6 +106,7 @@ public class DisplayController : MonoBehaviour {
 			// Parent the buttons to the panel - will fall into vertical 
 			// layout group and be arranged correctly
 			answerButtonGameObject.transform.SetParent(answerButtonParent);
+           
 
 			// add to the list of objects
 			answerButtonGameObjects.Add(answerButtonGameObject);
