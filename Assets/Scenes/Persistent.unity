@@ -113,6 +113,47 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &74441087
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 74441088}
+  - component: {fileID: 74441089}
+  m_Layer: 0
+  m_Name: SceneTransitions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &74441088
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 74441087}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 220244866}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &74441089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 74441087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b067d4340f7f2c94eb1c2fbec58088ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
 --- !u!1 &220244864
 GameObject:
   m_ObjectHideFlags: 0
@@ -140,16 +181,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7662474aa9464144bc577877d7eb9e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dataController: {fileID: 0}
   displayController: {fileID: 0}
   questionText: {fileID: 0}
   questionImage: {fileID: 0}
   scoreText: {fileID: 0}
   pauseDisplay: {fileID: 0}
   gamePaused: 0
+  gameActive: 0
   timeRemaining: 0
   playerScore: 0
-  playerScoreDisp: 0
   roundScore: 0
+  roundStartScore: 0
   totalRoundScore: 0
   currentQuestion:
     abbreviation: 
@@ -157,11 +200,13 @@ MonoBehaviour:
     capital: 
   answers: []
   mode: 0
+  roundNumber: -1
   perfectRound: 0
   perfectGame: 1
   secondsRemainingBonus: 0
   perfectRoundBonus: 100
   perfectGameBonus: 250
+  newHighScore: 0
 --- !u!4 &220244866
 Transform:
   m_ObjectHideFlags: 0
@@ -171,7 +216,9 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 635.3809, y: 473.517, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1423777110}
+  - {fileID: 74441088}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -217,3 +264,54 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1423777109
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1423777110}
+  - component: {fileID: 1423777111}
+  m_Layer: 0
+  m_Name: DisplayController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1423777110
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1423777109}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -635.3809, y: -473.517, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 220244866}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1423777111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1423777109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be01a2811f36cf346871377defa5cc23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  questionText: {fileID: 0}
+  questionImage: {fileID: 0}
+  scoreText: {fileID: 0}
+  roundText: {fileID: 0}
+  timeRemainingText: {fileID: 0}
+  scoreAnimationText: {fileID: 0}
+  scoreAnimationDisplay: {fileID: 0}
+  pauseDisplay: {fileID: 0}
+  sceneTransitions: {fileID: 0}
+  answerButtonObjectPool: {fileID: 0}
+  answerButtonParent: {fileID: 0}

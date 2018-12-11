@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Persistent.unity
+    guid: 5e74bc1176bc89340b080e622f998084
+  - enabled: 1
+    path: Assets/Scenes/MenuScreenWithTransitions.unity
+    guid: 48f3f1a9a09821a4d8643a20d0ef7f6c
+  - enabled: 1
+    path: Assets/Scenes/MenuScreenWithTransitions2.unity
+    guid: 82d5699cbfdcf5b43a2f621bf9928546
+  - enabled: 1
+    path: Assets/Scenes/StatesGameScene.unity
+    guid: 887bf6efb2ecc7c4f82c40db0d2a8a88
+  - enabled: 1
+    path: Assets/Scenes/AchievementsScene.unity
+    guid: 41dd9904548121b4fb3c6aba68ff1289
+  - enabled: 1
+    path: Assets/Scenes/CapitalsGameScene.unity
+    guid: e1f311919de1da34788403e0b6844825
+  - enabled: 1
+    path: Assets/Scenes/GameOverScene.unity
+    guid: c7c3a90688bbfd14eaf824b6bd069c82
+  - enabled: 1
+    path: Assets/Scenes/HighScoresScene.unity
+    guid: 8768160321ce54249bdd4aed157968e5
+  - enabled: 1
+    path: Assets/Scenes/MenuScreen.unity
+    guid: d749e98749c8820409552b60cba95e69
+  - enabled: 1
+    path: Assets/Scenes/MenuScreen2.unity
+    guid: a87ae8abd4e6b6b4cb45c54de94c5df2
+  - enabled: 1
+    path: Assets/Scenes/RoundOverScene.unity
+    guid: dcec1d2db126e1a4f9ea5097bcc260b0
+  - enabled: 1
+    path: Assets/Scenes/MenuScreenLandscape.unity
+    guid: ebd37b3ac3ea32841a3c3bbaca2254cc
+  - enabled: 1
+    path: Assets/Scenes/MenuScreen2Landscape.unity
+    guid: 202bc440da0c1684aa83425a9d3e8601
+  - enabled: 1
+    path: Assets/Scenes/StatesGameSceneLandscape.unity
+    guid: d58710f8984d0a0429bfc0f5bfa810a1
+  m_configObjects: {}

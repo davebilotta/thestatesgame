@@ -20,8 +20,8 @@ public class GameController : MonoBehaviour {
 	private Question[] questionPool;
 
 	public bool gamePaused;
-	private bool roundActive;                     // Has the round started?
-	private bool gameActive;                      // Has the game started?
+	public bool roundActive;                     // Has the round started?
+	public bool gameActive;                      // Has the game started?
 	public float timeRemaining;                   // How much time is left
 	private int questionIndex = 0;                // what number question are we on
 	public int playerScore;                       // This is the cumulative player score (what displays at the top)
@@ -36,7 +36,7 @@ public class GameController : MonoBehaviour {
 	public MyGameMode mode;
 
 	public int roundNumber = -1;                 // which round out of (1-N) are we on
-	private int roundTimeLimit = 6000;              // how long will each round last, in seconds
+	private int roundTimeLimit = 90;              // how long will each round last, in seconds
 	private int pointsPerSecondRemaining = 1;     // how many points does each remaining second get you 
 	private int pointsPerButtonRemaining = 10;    // how many points does each correct answer get you
 	public bool perfectRound;                     // gets initialized in StartRound
@@ -78,9 +78,6 @@ public class GameController : MonoBehaviour {
         roundStartScore = playerScore;
 		perfectRound = true;
 
-		// TODO: These two lines can be removed 
-		//Logger.Log("MY Display Controller is " + displayController.ToString());
-		//displayController.Announce();
 
 		roundNumber++;
 		Logger.Log("Starting round " + roundNumber);
@@ -95,7 +92,10 @@ public class GameController : MonoBehaviour {
 
 		questionIndex = 0;
 		timeRemaining = roundTimeLimit;
-		NextQuestion();
+
+        Logger.Log("timeRemaining: " + timeRemaining.ToString() + ", roundTimeLimit" + roundTimeLimit.ToString());
+
+        NextQuestion();
 
 		gamePaused = false;
 	}
@@ -113,93 +113,7 @@ public class GameController : MonoBehaviour {
 		// Now call logic to show it
 		displayController.ShowQuestion();
 	}
-
-	/*private void ShowQuestion() {
-		// Stop timer at beginning 
-		//roundActive = false;
-
-		// Clear out any old ones
-		RemoveAllAnswerButtons();    
-
-		// Get what question we're on from the pool and store it 
-		Logger.Log("idx" + questionIndex);
-
-		currentQuestion = questionPool[questionIndex]; 
-		string qText;
-		Sprite questionSprite;
-
-		// TODO: This should probably all be done up front? 
-	
-		// Build string for question and image depending on mode
-		if (GetGameMode() == "states") {
-			qText = "Which state is this? ";
-			//answer = currentQuestion.abbreviation;
-
-			// TODO: 1) need to fix names with spaces
-			// TODO: Need to figure out a way to pull this from the json and Preload it 
-			questionSprite = Resources.Load<Sprite>(getImagePath(currentQuestion));
-
-		}
-		else {
-			qText = "What is the capital of " + currentQuestion.name + "?"; 
-			//answer = currentQuestion.capital;
-			questionSprite = Resources.Load<Sprite>(getImagePath(currentQuestion));
-
-		}
-
-		questionText.text = qText;
-		questionImage.sprite = questionSprite;
-
-		questionImage.GetComponent<Image>().sprite = questionSprite;
-
-		// now find 4 other questions TODO make these into buttons
-		List<Question> questionAnswers = FindOtherQuestions(currentQuestion,dataController.numAnswers - 1);
-
-		questionAnswers.Add(currentQuestion);
-		questionAnswers = Shuffle(questionAnswers);
-
-		// Show as many buttons as the question has answers
-			for (int i = 0; i < questionAnswers.Count; i++) {
-				// get me another spawned button that isn't being used
-				GameObject answerButtonGameObject = answerButtonObjectPool.GetObject(); 
-
-				// Parent the buttons to the panel - will fall into vertical 
-				// layout group and be arranged correctly
-				answerButtonGameObject.transform.SetParent(answerButtonParent);
-
-				// add to the list of objects
-				answerButtonGameObjects.Add(answerButtonGameObject);
-
-				// Get the AnswerButton script attached
-				AnswerButton answerButton = answerButtonGameObject.GetComponent<AnswerButton>();
-				answerButton.question = questionAnswers[i];
-
-			if (GetGameMode() == "states") {
-				answerButton.Setup(new AnswerData(questionAnswers[i].name));
-			}
-			else {
-				answerButton.Setup(new AnswerData(questionAnswers[i].capital));
-			}
-		}
-
-		//roundActive = true;
-	} */
-		
-	/*private string getImagePath(Question q) {
-		string imagePath = "";
-		if (GetGameMode() == "states") {
-			imagePath = "raw/state_images/";
-		}
-		else {
-			imagePath = "raw/state_images_capital/";
-		}
-		string[] n = q.name.ToLower().Split();
-		foreach (string s in n) {
-			imagePath += s; 		
-		}
-		return imagePath;
-	} */
-
+    
 	public List<Question> Shuffle(List<Question> items) {
 
 		// shuffles a round and returns the value 
@@ -279,7 +193,9 @@ public class GameController : MonoBehaviour {
 
 	public void EndRound() {
 		roundActive = false;
-		AddRoundScore();
+        displayController.EndRound();
+        
+        AddRoundScore();
 		SceneManager.LoadScene("RoundOverScene");
 	}
 
@@ -287,14 +203,16 @@ public class GameController : MonoBehaviour {
 		Logger.Log("GAME OVER");
 		roundActive = false;
 		gameActive = false;
-		AddRoundScore();
+        displayController.EndRound();
+
+        AddRoundScore();
 		newHighScore = AddGameScore();
 		SceneManager.LoadScene("GameOverScene");
 	}
 
 	public void ReturnToMenu() {
         // TODO: This needs changes to use landscape mode
-		SceneManager.LoadScene("MenuScreen");
+		SceneManager.LoadScene("MenuScreenLandscape");
 	}
 
 	public void GamePause() {
@@ -344,9 +262,9 @@ public class GameController : MonoBehaviour {
 		if (!gamePaused) {
 			if (roundActive) {
 				// subtract time it took to render the last frame
-				timeRemaining -= Time.deltaTime; 
+				timeRemaining -= Time.deltaTime;
 
-				if (timeRemaining <= 0f) {
+               if (timeRemaining <= 0f) {
 					perfectRound = false;
 					perfectGame = false;
 					if (roundNumber >= (dataController.roundData.Count-1)) {

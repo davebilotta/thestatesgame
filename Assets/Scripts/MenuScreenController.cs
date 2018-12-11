@@ -3,14 +3,24 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 
 public class MenuScreenController : MonoBehaviour {
-			
-	public void LoadNextMenuScene() {
-        SceneManager.LoadScene("MenuScreen2Landscape");
-        //SceneManager.LoadScene("MenuScreenWithTransitions2");
-	}
+
+    private DisplayController displayController;
+    private GameController gc;
+
+    public void Awake()
+    {
+        gc = FindObjectOfType<GameController>();
+        displayController = gc.displayController;
+        
+    }
+
+    public void LoadNextMenuScene() {
+        displayController.LoadScene("MenuScreen2Landscape");
+    }
 
 	public void LoadHighScores() {
-		SceneManager.LoadScene("HighScoresScene");
+        //SceneManager.LoadScene("HighScoresScene");
+        displayController.LoadScene("HighScoresScene");
 	}
 
 	public void LoadSettings() {
@@ -20,12 +30,15 @@ public class MenuScreenController : MonoBehaviour {
 		GameController gameController = FindObjectOfType<GameController>();
 		gameController.StartGame();
         //SceneManager.LoadScene("StatesGameScene");
-        SceneManager.LoadScene("StatesGameSceneLandscape");
+        //SceneManager.LoadScene("StatesGameSceneLandscape");
+        displayController.LoadScene("StatesGameSceneLandscape");
     }
 
 	public void PlayCapitalsGame() {
 		GameController gameController = FindObjectOfType<GameController>();
 		gameController.StartGame();
-		SceneManager.LoadScene("CapitalsGameScene");
-	}
+        //SceneManager.LoadScene("CapitalsGameScene");
+        displayController.LoadScene("CapitalsGameScene");
+
+    }
 }

@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using System.IO;
 
 public class DataController : MonoBehaviour {
-    private int roundSize = 3;           // This is how many questions per round
+    private int roundSize = 10;           // This is how many questions per round
 	public int numAnswers = 5;           // This is how many answers we present to user
 
-	private int maxQuestions = 6;  // This is just for testing purposes to get to end of round/game quicker
+	private int maxQuestions = 50;  // This is just for testing purposes to get to end of round/game quicker
 
 	private StatesGameData[] statesData;
 	//private List<StatesGameData> roundData = new List<StatesGameData>();
@@ -23,15 +23,15 @@ public class DataController : MonoBehaviour {
 	//private string capitalsGameDataFileName = "capitalsdata.json";
 
 	void Start () {
-		DontDestroyOnLoad(gameObject);            // We want this to persist when we load new scenes
-
+        Logger.Log("DataController Start");
+        DontDestroyOnLoad(gameObject);            // We want this to persist when we load new scenes
+       
+        
 		LoadGameData();
 		LoadPlayerProgress();
 
-        // TODO: Should this get moved elsewhere?
-        SceneManager.LoadScene("MenuScreenLandscape");
-        //SceneManager.LoadScene("MenuScreenWithTransitions");
-
+        SceneManager.LoadScene("MenuScreen2Landscape");
+ 
     }
 		
 	public StatesGameData getCurrentRoundData() {
@@ -85,16 +85,50 @@ public class DataController : MonoBehaviour {
 		return playerProgress.highestScore;
 	}
 
+    private GameData LoadFile ()
+    {
+        string filePath = Path.Combine(Application.streamingAssetsPath, statesGameDataFileName);
+
+        Logger.Log("Will load file from " + filePath);
+
+        string dataAsJson = "";
+
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            Logger.Log("Reading for Android");
+            WWW reader = new WWW(filePath);
+            //yield return www;
+            Logger.Log("Done with create");
+            //Logger.Log("error " + reader.error.ToString());
+
+            dataAsJson = reader.text;
+            /* while (!reader.isDone)
+            {
+                Logger.Log("Reading ...");
+                dataAsJson = reader.text;
+            } */
+
+        }
+        else
+        {
+            Logger.Log("Reading for Other");
+            if (File.Exists(filePath))
+            {
+                dataAsJson = File.ReadAllText(filePath);
+            }
+        }
+
+        Logger.Log("Data is " + dataAsJson.ToString());
+        return JsonUtility.FromJson<GameData>(dataAsJson); 
+    }
+
 	private void LoadGameData() {
-		
-		string filePath = Path.Combine(Application.streamingAssetsPath,statesGameDataFileName);
+        Logger.Log("In LoadGameData()");
 
-		if (File.Exists(filePath)) {
-			// read all text from file at path 
-			string dataAsJson = File.ReadAllText(filePath);
-
-			GameData loadedData = JsonUtility.FromJson<GameData>(dataAsJson);
-
+        GameData loadedData = LoadFile();
+        
+        if (loadedData != null) {
+          
 			// Load all of the states 
 			statesData = loadedData.statesData;
 			StatesGameData[] data = statesData;

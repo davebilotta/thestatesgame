@@ -16,11 +16,12 @@ public class DisplayController : MonoBehaviour {
 
     public Text scoreAnimationText;
     public GameObject scoreAnimationDisplay;
-    private bool scoreAnimationActive;
-    private float scoreAnimationFadeDelay = 0.01f;
+    private bool scoreAnimationActive = false;
+    private float scoreAnimationFadeDelay = 0.025f;
 
     public GameObject pauseDisplay;
 
+    public SceneTransitions sceneTransitions;
 	public SimpleObjectPool answerButtonObjectPool;
 	public Transform answerButtonParent;
 	private List<GameObject> answerButtonGameObjects = new List<GameObject>();
@@ -29,17 +30,31 @@ public class DisplayController : MonoBehaviour {
 	void Awake() {
 		//Logger.Log("DISPLAY CONTROLLER AWAKE");
 		gc = FindObjectOfType<GameController>();
-	}
+        gc.displayController = this;
 
-	void Start () {
-        
-	}
-	
-	void Update () 
-	{
-		UpdateTimeRemainingDisplay();
-        UpdateScoreAnimation();
-   	}
+        sceneTransitions = FindObjectOfType<SceneTransitions>();
+     //   Debug.Log("ST " + sceneTransitions.ToString());
+
+        // TODO: Should this get moved elsewhere?
+        //SceneManager.LoadScene("MenuScreenLandscape");
+        //SceneManager.LoadScene("MenuScreenWithTransitions");
+       // LoadScene("MenuScreenLandscape");
+       
+    }
+
+    void Start () {
+        DontDestroyOnLoad(gameObject);
+    }
+
+    void Update()
+    {
+        // TODO: This throws a single error at start, need to figure this out (tried adding && gc.displayController != null but it didn't work)
+        if (gc.roundActive)
+        {
+            UpdateTimeRemainingDisplay();
+            UpdateScoreAnimation();
+        }
+    }
 
     public void UpdateScoreText()
     {
@@ -55,7 +70,10 @@ public class DisplayController : MonoBehaviour {
 
     private void UpdateTimeRemainingDisplay()
     {
-        timeRemainingText.text = Mathf.Round(gc.timeRemaining).ToString();
+        // timeRemainingText.text = Mathf.Round(gc.timeRemaining).ToString();
+
+        // TODO: why can't I just reference timeRemainingText alone? (Throws an error)
+        gc.displayController.timeRemainingText.text = Mathf.Round(gc.timeRemaining).ToString();
     }
 
 	public void ShowQuestion() {
@@ -146,7 +164,7 @@ public class DisplayController : MonoBehaviour {
         if (scoreAnimationActive)
         {
             Color c = scoreAnimationText.color;
-            //Logger.Log("Color's alpha is " + c.a);
+            //Color c = scoreAnimationText.color;
 
             if (c.a > 0f)
             {
@@ -243,11 +261,20 @@ public class DisplayController : MonoBehaviour {
 	}
 
     // TODO: this can eventually go away
-    public void Announce()
+    /*public void Announce()
     {
         //Logger.Log("Announcing DisplayController");
+    } */
+
+    public void LoadScene(string sceneName)
+    {
+        sceneTransitions.LoadScene(sceneName);
     }
 
+    public void EndRound()
+    {
+        scoreAnimationActive = false;
+    }
 
     /*public List<Question> FindOtherQuestions(Question q,int n) {
 		// Given a question, find n other Questions that do not match

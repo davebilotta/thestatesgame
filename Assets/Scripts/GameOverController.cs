@@ -106,7 +106,7 @@ public class GameOverController : MonoBehaviour {
 
 	public void ReturnToMenu() {
         
-		SceneManager.LoadScene("MenuScreenLandscape");
+		SceneManager.LoadScene("MenuScreen2Landscape");
 	}
 
 	public void LoadHighScores() {

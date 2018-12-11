@@ -8,20 +8,20 @@ public class SceneTransitions : MonoBehaviour {
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            LoadScene("MenuScreenWithTransitions2");
-        }
+       // Debug.Log("SceneTransitions Update");
     }
 
     public void LoadScene(string sceneName)
     {
-        sceneToLoad = sceneName;
-        animator.SetTrigger("FadeOut");
+        //sceneToLoad = sceneName;
+        //animator.SetTrigger("FadeOut");
+
+        SceneManager.LoadScene(sceneName);
     }
    
     public void OnFadeComplete()
     {
+        //animator.enabled = false;
         SceneManager.LoadScene(sceneToLoad);
     }
 }

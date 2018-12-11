@@ -8,7 +8,7 @@ public class StatesGameController : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-		Logger.Log("***** STATESGAME CONTROLLER AWAKE *****");
+		//Logger.Log("***** STATESGAME CONTROLLER AWAKE *****");
 		DataController dataController = FindObjectOfType<DataController>();
 		dataController.LoadGameDataForScene("states");
 
@@ -18,7 +18,7 @@ public class StatesGameController : MonoBehaviour {
 	}
 
 	void Start() {
-		Logger.Log("***** STATESGAME CONTROLLER START *****");
+		//Logger.Log("***** STATESGAME CONTROLLER START *****");
 
 		displayController = GetComponent<DisplayController>();
 		
