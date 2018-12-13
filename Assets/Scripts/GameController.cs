@@ -78,9 +78,8 @@ public class GameController : MonoBehaviour {
         roundStartScore = playerScore;
 		perfectRound = true;
 
-
 		roundNumber++;
-		Logger.Log("Starting round " + roundNumber);
+		Logger.Log("Starting round " + roundNumber + ", Perfect Game =" + perfectGame.ToString());
 		
 		// TODO Need to rename so it doesn't say "new"
 		currentRoundData = dataController.getCurrentRoundDataNew(roundNumber);
@@ -203,6 +202,7 @@ public class GameController : MonoBehaviour {
 		Logger.Log("GAME OVER");
 		roundActive = false;
 		gameActive = false;
+        Logger.Log("Perfect Game = " + perfectGame);
         displayController.EndRound();
 
         AddRoundScore();

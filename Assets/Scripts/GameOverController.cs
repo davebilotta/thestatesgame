@@ -36,6 +36,7 @@ public class GameOverController : MonoBehaviour {
         scoreCountUpComplete = false;
 
 		gameScoreText.text = gc.totalRoundScore.ToString();
+
 		if (gc.perfectGame) {
 			perfectGameBonusText.text = gc.perfectGameBonus.ToString() + "";
 		}
@@ -57,7 +58,7 @@ public class GameOverController : MonoBehaviour {
         gameScoreNumInc = ((double)gameScoreNumMax / framesRequired);
 
         // Perfect Game
-        if (gc.perfectRound)
+        if (gc.perfectGame)
         {
             perfectGameBonusNumMax = gc.perfectGameBonus;
             perfectGameBonusNumInc = ((double)perfectGameBonusNumMax / framesRequired);

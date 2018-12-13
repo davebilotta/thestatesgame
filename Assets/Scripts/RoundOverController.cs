@@ -185,6 +185,8 @@ private GameController gc;
 	}
 
 	public void ReturnToMenu() {
-		SceneManager.LoadScene("MenuScreen");
+        gc.roundActive = false;
+        gc.gameActive = false;
+		SceneManager.LoadScene("MenuScreenLandscape");
 	}
 }
