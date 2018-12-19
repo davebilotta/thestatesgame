@@ -130,41 +130,49 @@ public class GameController : MonoBehaviour {
 		
 	public void OnAnswerButtonClick(AnswerButton button) 
 	{
-		// ***** CORRECT ANSWER *****
-		if (button.question == currentQuestion) {
-			//Logger.Log("CORRECT!");
+        if (!gamePaused)
+        {
+            // ***** CORRECT ANSWER *****
+            if (button.question == currentQuestion)
+            {
+                //Logger.Log("CORRECT!");
 
-			// Score for each button left (if you get it on the first try it's 5, if there were 2 incorrect guesses it's 3, etc.)
-			int score = displayController.GetNumAnswersRemaining() * pointsPerButtonRemaining;
-            roundScore += score;
-            playerScore += score;
+                // Score for each button left (if you get it on the first try it's 5, if there were 2 incorrect guesses it's 3, etc.)
+                int score = displayController.GetNumAnswersRemaining() * pointsPerButtonRemaining;
+                roundScore += score;
+                playerScore += score;
 
-			displayController.OnCorrectAnswer(score);
+                displayController.OnCorrectAnswer(score);
 
-			// Do we still have questions left?
-			if (questionPool.Length > questionIndex + 1) {
-				Logger.Log("Still have more questions " + questionPool.Length + " " + questionIndex);
-				questionIndex++;
-				NextQuestion();
-			}
-			else {
-				Logger.Log("Checking round number " + roundNumber + " " + dataController.roundData.Count);
-				if (roundNumber >= (dataController.roundData.Count-1)) {
-					EndGame();
-				}
-				else {
-					EndRound();
-				}
-			} 
-		}
+                // Do we still have questions left?
+                if (questionPool.Length > questionIndex + 1)
+                {
+                    Logger.Log("Still have more questions " + questionPool.Length + " " + questionIndex);
+                    questionIndex++;
+                    NextQuestion();
+                }
+                else
+                {
+                    Logger.Log("Checking round number " + roundNumber + " " + dataController.roundData.Count);
+                    if (roundNumber >= (dataController.roundData.Count - 1))
+                    {
+                        EndGame();
+                    }
+                    else
+                    {
+                        EndRound();
+                    }
+                }
+            }
 
-		// ***** INCORRECT ANSWER *****
-		else 
-		{
-			perfectRound = false;
-			perfectGame = false;
-			displayController.OnIncorrectAnswer(button);
-		}
+            // ***** INCORRECT ANSWER *****
+            else
+            {
+                perfectRound = false;
+                perfectGame = false;
+                displayController.OnIncorrectAnswer(button);
+            }
+        }
 	}
 		
 	public void AddRoundScore() {

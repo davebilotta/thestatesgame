@@ -41,6 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 128222355
+    locked: 0
   - name: UIComponents
     uniqueID: 3431601863
     locked: 0
