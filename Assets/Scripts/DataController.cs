@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using System.IO;
 
 public class DataController : MonoBehaviour {
-    private int roundSize = 2;           // This is how many questions per round
+    private int roundSize = 5;           // This is how many questions per round
 	public int numAnswers = 5;           // This is how many answers we present to user
 
-	private int maxQuestions = 6;  // This is just for testing purposes to get to end of round/game quicker
+	private int maxQuestions = 12;  // This is just for testing purposes to get to end of round/game quicker
 
 	private StatesGameData[] statesData;
 	//private List<StatesGameData> roundData = new List<StatesGameData>();
@@ -25,12 +25,12 @@ public class DataController : MonoBehaviour {
 	void Start () {
         Logger.Log("DataController Start");
         DontDestroyOnLoad(gameObject);            // We want this to persist when we load new scenes
-       
-        
+               
 		LoadGameData();
 		LoadPlayerProgress();
 
-        SceneManager.LoadScene("MenuScreenLandscape");
+        //TODO: Once the main screen has more than just Play active, change this back to MenuScreenLandscape 
+        SceneManager.LoadScene("MenuScreen2Landscape");
  
     }
 		

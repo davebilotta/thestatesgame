@@ -148,9 +148,15 @@ private GameController gc;
 
 	public void NextRound() {
 		if (!exitConfirmationDialogDisplayed) {
-            //SceneManager.LoadScene("StatesGameScene");
-            SceneManager.LoadScene("StatesGameSceneLandscape");
-            //gc.StartRound();
+
+            if (gc.GetGameMode() == "capitals")
+            {
+                SceneManager.LoadScene("CapitalsGameSceneLandscape");
+            }
+            else
+            {
+                SceneManager.LoadScene("StatesGameSceneLandscape");
+            }
         }
 	}
 

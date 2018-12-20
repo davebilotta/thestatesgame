@@ -92,7 +92,7 @@ public class StatesGameController : MonoBehaviour {
     {
         gameController.roundActive = false;
         gameController.gameActive = false;
-        SceneManager.LoadScene("MenuScreenLandscape");
+        SceneManager.LoadScene("MenuScreen2Landscape");
     }
 
     // Update is called once per frame

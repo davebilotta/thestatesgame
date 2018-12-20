@@ -19,7 +19,6 @@ public class MenuScreenController : MonoBehaviour {
     }
 
 	public void LoadHighScores() {
-        //SceneManager.LoadScene("HighScoresScene");
         displayController.LoadScene("HighScoresScene");
 	}
 
@@ -29,16 +28,15 @@ public class MenuScreenController : MonoBehaviour {
 	public void PlayStatesGame() {
 		GameController gameController = FindObjectOfType<GameController>();
 		gameController.StartGame();
-        //SceneManager.LoadScene("StatesGameScene");
-        //SceneManager.LoadScene("StatesGameSceneLandscape");
+
         displayController.LoadScene("StatesGameSceneLandscape");
     }
 
 	public void PlayCapitalsGame() {
 		GameController gameController = FindObjectOfType<GameController>();
 		gameController.StartGame();
-        //SceneManager.LoadScene("CapitalsGameScene");
-        displayController.LoadScene("CapitalsGameScene");
+       
+        displayController.LoadScene("CapitalsGameSceneLandscape");
 
     }
 }

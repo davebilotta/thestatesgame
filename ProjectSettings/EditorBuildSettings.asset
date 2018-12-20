@@ -42,6 +42,9 @@ EditorBuildSettings:
     path: Assets/Scenes/MenuScreenLandscape.unity
     guid: ebd37b3ac3ea32841a3c3bbaca2254cc
   - enabled: 1
+    path: Assets/Scenes/CapitalsGameSceneLandscape.unity
+    guid: b1210d4276f44ad44b9f1974bd689b68
+  - enabled: 1
     path: Assets/Scenes/MenuScreen2Landscape.unity
     guid: 202bc440da0c1684aa83425a9d3e8601
   - enabled: 1
