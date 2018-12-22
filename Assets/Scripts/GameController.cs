@@ -81,8 +81,9 @@ public class GameController : MonoBehaviour {
 		roundNumber++;
 		Logger.Log("Starting round " + roundNumber + ", Perfect Game =" + perfectGame.ToString());
 		
-		// TODO Need to rename so it doesn't say "new"
-		currentRoundData = dataController.getCurrentRoundDataNew(roundNumber);
+		currentRoundData = dataController.getCurrentRoundData(roundNumber);
+
+        displayController.LoadRoundImages(currentRoundData);
 
         displayController.UpdateRoundText();
         displayController.UpdateScoreText();

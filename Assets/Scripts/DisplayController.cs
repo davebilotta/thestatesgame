@@ -25,9 +25,11 @@ public class DisplayController : MonoBehaviour {
 	public SimpleObjectPool answerButtonObjectPool;
 	public Transform answerButtonParent;
 	private List<GameObject> answerButtonGameObjects = new List<GameObject>();
-    
+    private List<Sprite> RoundImageList;
 
-	void Awake() {
+
+
+    void Awake() {
 		//Logger.Log("DISPLAY CONTROLLER AWAKE");
 		gc = FindObjectOfType<GameController>();
         gc.displayController = this;
@@ -66,8 +68,7 @@ public class DisplayController : MonoBehaviour {
     {
         roundText.text = "Round " + (gc.roundNumber + 1) + " of " + gc.dataController.roundData.Count;
     }
-
-
+    
     private void UpdateTimeRemainingDisplay()
     {
         // timeRemainingText.text = Mathf.Round(gc.timeRemaining).ToString();
@@ -76,7 +77,13 @@ public class DisplayController : MonoBehaviour {
         gc.displayController.timeRemainingText.text = Mathf.Round(gc.timeRemaining).ToString();
     }
 
-	public void ShowQuestion() {
+
+    public Sprite GetQuestionImage(Question q)
+    {
+        return q.image;
+    }
+
+    public void ShowQuestion() {
 
 		// Clear out any old ones
 		RemoveAllAnswerButtons();    
@@ -85,8 +92,7 @@ public class DisplayController : MonoBehaviour {
 		Question currentQuestion = gc.currentQuestion;
 
 		string qText;
-		Sprite questionSprite;
-
+		
 		// TODO: This should all be done when the level loads
 
 		// Build string for question and image depending on mode
@@ -95,16 +101,16 @@ public class DisplayController : MonoBehaviour {
 
 			// TODO: 1) need to fix names with spaces
 			// TODO: Need to figure out a way to pull this from the json and Preload it 
-			questionSprite = Resources.Load<Sprite>(getImagePath(currentQuestion));
-
+			
 		}
 		else {
 			qText = "What is the capital of " + currentQuestion.name + "?"; 
-			questionSprite = Resources.Load<Sprite>(getImagePath(currentQuestion));
-
+			
 		}
 
-		questionText.text = qText;
+        Sprite questionSprite = currentQuestion.image;
+
+        questionText.text = qText;
 		questionImage.sprite = questionSprite;
 
 		questionImage.GetComponent<Image>().sprite = questionSprite;
@@ -176,7 +182,6 @@ public class DisplayController : MonoBehaviour {
                 InactivateScoreAnimation();                
             }           
         }
-
     }
 
     public void ActivateScoreAnimation(int score)
@@ -233,32 +238,10 @@ public class DisplayController : MonoBehaviour {
 		}
 	}
 
-	public void ActivateCorrectAnimation() {
-       
-    }
-
-	public void ActivateIncorrectAnimation() {
-
-	}
-
+	
 	public void GamePause(bool gamePaused) {
 		pauseDisplay.SetActive(gamePaused);
 	}	
-
-	private string getImagePath(Question q) {
-		string imagePath = "";
-		if (gc.GetGameMode() == "states") {
-			imagePath = "raw/state_images/";
-		}
-		else {
-			imagePath = "raw/state_images_capital/";
-		}
-		string[] n = q.name.ToLower().Split();
-		foreach (string s in n) {
-			imagePath += s; 		
-		}
-		return imagePath;
-	}
 
     // TODO: this can eventually go away
     /*public void Announce()
@@ -274,6 +257,50 @@ public class DisplayController : MonoBehaviour {
     public void EndRound()
     {
         scoreAnimationActive = false;
+        UnloadRoundImages();
+    }
+
+
+    public string getImagePath(Question q)
+    {
+        string imagePath = "";
+        if (gc.GetGameMode() == "states")
+        {
+            imagePath = "raw/state_images/";
+        }
+        else
+        {
+            imagePath = "raw/state_images_capital/";
+        }
+        string[] n = q.name.ToLower().Split();
+        foreach (string s in n)
+        {
+            imagePath += s;
+        }
+        return imagePath;
+    }
+
+    public void LoadRoundImages(Question[] questionList)
+    {
+        RoundImageList = new List<Sprite>();
+        foreach (Question q in questionList)
+        {
+
+            string path = getImagePath(q);
+            Logger.Log("Loading image at path " + path);
+
+            q.image = Resources.Load<Sprite>(getImagePath(q));
+            RoundImageList.Add(q.image);
+        }
+    }
+
+    public void UnloadRoundImages()
+    {
+        foreach (Sprite s in RoundImageList)
+        {
+            Logger.Log("Unloading asset " + s);
+            Resources.UnloadAsset(s);
+        }
     }
 
     /*public List<Question> FindOtherQuestions(Question q,int n) {

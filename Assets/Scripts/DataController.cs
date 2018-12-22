@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 
 public class DataController : MonoBehaviour {
-    private bool testingMode = true;
+    private bool testingMode = false;
 
     private int roundSize;             // This is how many questions per round
 	public int numAnswers;             // This is how many answers we present to user
@@ -21,7 +21,7 @@ public class DataController : MonoBehaviour {
 
 	private string statesGameDataFileName = "statesdata.json";
 
-	void Start () {
+    void Start () {
         DontDestroyOnLoad(gameObject);            // We want this to persist when we load new scenes
 
         if (testingMode)
@@ -42,15 +42,9 @@ public class DataController : MonoBehaviour {
         SceneManager.LoadScene("MenuScreen2Landscape");
  
     }
-		
-	public StatesGameData getCurrentRoundData() {
-		// for now we'll only have one item 
-		return statesData[0];
-	}
 
-	//public List<Question> getCurrentRoundDataNew(int roundNumber) {
-	public Question[] getCurrentRoundDataNew(int roundNumber) {
-			// TODO: Check index out of range 
+    public Question[] getCurrentRoundData(int roundNumber) {
+		// TODO: Check index out of range 
 		//return roundData[roundNumber];
 		// TODO: This needs to return an array of questions 
 		List<Question> qList = roundData[roundNumber].questionList;
@@ -222,5 +216,6 @@ public class DataController : MonoBehaviour {
 	private void SaveHighScoresData() {
 
 	}
-		
+
+
 }

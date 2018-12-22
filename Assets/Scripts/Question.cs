@@ -7,4 +7,6 @@ public class Question {
 	public string abbreviation;
 	public string name;
 	public string capital;
+
+    public Sprite image;
 }
