@@ -6,46 +6,51 @@ using UnityEngine.SceneManagement;
 using System;
 
 public class DisplayController : MonoBehaviour {
-	private GameController gc;
+    private GameController gc;
 
-	public Text questionText;
-	public Image questionImage;
-	public Text scoreText;
+    public Text questionText;
+    public Image questionImage;
+    public Text scoreText;
     public Text roundText;
-	public Text timeRemainingText;
+    public Text timeRemainingText;
 
     public Text scoreAnimationText;
     public GameObject scoreAnimationDisplay;
     private bool scoreAnimationActive = false;
     private float scoreAnimationFadeDelay = 0.025f;
 
+    public Text answerAnimationText;
+    public GameObject answerAnimationDisplay;
+    private bool answerAnimationActive = false;
+    private float answerAnimationFadeDelay = 0.025f;
+
     public GameObject pauseDisplay;
 
     public SceneTransitions sceneTransitions;
-	public SimpleObjectPool answerButtonObjectPool;
-	public Transform answerButtonParent;
-	private List<GameObject> answerButtonGameObjects = new List<GameObject>();
+    public SimpleObjectPool answerButtonObjectPool;
+    public Transform answerButtonParent;
+    private List<GameObject> answerButtonGameObjects = new List<GameObject>();
     private List<Sprite> RoundImageList;
 
 
 
     void Awake() {
-		//Logger.Log("DISPLAY CONTROLLER AWAKE");
-		gc = FindObjectOfType<GameController>();
+        //Logger.Log("DISPLAY CONTROLLER AWAKE");
+        gc = FindObjectOfType<GameController>();
         gc.displayController = this;
 
         sceneTransitions = FindObjectOfType<SceneTransitions>();
-     //   Debug.Log("ST " + sceneTransitions.ToString());
+        //   Debug.Log("ST " + sceneTransitions.ToString());
 
         // TODO: Should this get moved elsewhere?
         //SceneManager.LoadScene("MenuScreenLandscape");
         //SceneManager.LoadScene("MenuScreenWithTransitions");
-       // LoadScene("MenuScreenLandscape");
-       
+        // LoadScene("MenuScreenLandscape");
+
     }
 
-    void Start () {
-     //   DontDestroyOnLoad(gameObject);
+    void Start() {
+        //   DontDestroyOnLoad(gameObject);
     }
 
     void Update()
@@ -55,6 +60,7 @@ public class DisplayController : MonoBehaviour {
         {
             UpdateTimeRemainingDisplay();
             UpdateScoreAnimation();
+            UpdateAnswerAnimation();
         }
     }
 
@@ -68,7 +74,7 @@ public class DisplayController : MonoBehaviour {
     {
         roundText.text = "Round " + (gc.roundNumber + 1) + " of " + gc.dataController.roundData.Count;
     }
-    
+
     private void UpdateTimeRemainingDisplay()
     {
         // timeRemainingText.text = Mathf.Round(gc.timeRemaining).ToString();
@@ -77,100 +83,11 @@ public class DisplayController : MonoBehaviour {
         gc.displayController.timeRemainingText.text = Mathf.Round(gc.timeRemaining).ToString();
     }
 
-
-    public Sprite GetQuestionImage(Question q)
-    {
-        return q.image;
-    }
-
-    public void ShowQuestion() {
-
-		// Clear out any old ones
-		RemoveAllAnswerButtons();    
-
-		// Get what question we're going to show 
-		Question currentQuestion = gc.currentQuestion;
-
-		string qText;
-		
-		// TODO: This should all be done when the level loads
-
-		// Build string for question and image depending on mode
-		if (gc.GetGameMode() == "states") {
-			qText = "Which state is this? ";
-
-			// TODO: 1) need to fix names with spaces
-			// TODO: Need to figure out a way to pull this from the json and Preload it 
-			
-		}
-		else {
-			qText = "What is the capital of " + currentQuestion.name + "?"; 
-			
-		}
-
-        Sprite questionSprite = currentQuestion.image;
-
-        questionText.text = qText;
-		questionImage.sprite = questionSprite;
-
-		questionImage.GetComponent<Image>().sprite = questionSprite;
-
-		// now find 4 other questions TODO make these into buttons
-		List<Question> answers = gc.answers;
-		answers.Add(currentQuestion);
-		answers = gc.Shuffle(answers);
-
-		//Logger.Log("The parent is " + answerButtonParent.ToString());
-
-		// Show as many buttons as the question has answers
-		for (int i = 0; i < answers.Count; i++) {
-			// get me another spawned button that isn't being used
-			GameObject answerButtonGameObject = answerButtonObjectPool.GetObject(); 
-
-			// Parent the buttons to the panel - will fall into vertical 
-			// layout group and be arranged correctly
-			answerButtonGameObject.transform.SetParent(answerButtonParent);
-           
-
-			// add to the list of objects
-			answerButtonGameObjects.Add(answerButtonGameObject);
-
-			// Get the AnswerButton script attached
-			AnswerButton answerButton = answerButtonGameObject.GetComponent<AnswerButton>();
-			answerButton.question = answers[i];
-
-			if (gc.GetGameMode() == "states") {
-				answerButton.Setup(new AnswerData(answers[i].name));
-			}
-			else {
-				answerButton.Setup(new AnswerData(answers[i].capital));
-			}
-		}
-
-		//roundActive = true;
-	}
-
-	private void RemoveAllAnswerButtons() {
-		// Go through and return ALL answerButtons to object pool that are in use
-
-		while (answerButtonGameObjects.Count > 0) {
-			// Return to the pool and remove from List 
-			answerButtonObjectPool.ReturnObject(answerButtonGameObjects[0]);
-			answerButtonGameObjects.RemoveAt(0);
-		}
-	}
-
-	public void OnCorrectAnswer(int score) {
-		UpdateScoreText();
-        ActivateScoreAnimation(score); 
-	}
-       
     public void UpdateScoreAnimation()
     {
         if (scoreAnimationActive)
         {
             Color c = scoreAnimationText.color;
-            //Color c = scoreAnimationText.color;
 
             if (c.a > 0f)
             {
@@ -179,18 +96,147 @@ public class DisplayController : MonoBehaviour {
             }
             else
             {
-                InactivateScoreAnimation();                
-            }           
+                InactivateScoreAnimation();
+            }
         }
     }
 
+    public void UpdateAnswerAnimation()
+    {
+        if (answerAnimationActive)
+        {
+            Color c = answerAnimationText.color;
+
+            if (c.a > 0f)
+            {
+                c.a -= answerAnimationFadeDelay;
+                answerAnimationText.color = c;
+            }
+            else
+            {
+                InactivateAnswerAnimation();
+            }
+        }
+    }
+    public Sprite GetQuestionImage(Question q)
+    {
+        return q.image;
+    }
+
+    public void ShowQuestion() {
+
+        // Clear out any old ones
+        RemoveAllAnswerButtons();
+
+        // Get what question we're going to show 
+        Question currentQuestion = gc.currentQuestion;
+
+        string qText;
+
+        // TODO: This should all be done when the level loads
+
+        // Build string for question and image depending on mode
+        if (gc.GetGameMode() == "states") {
+            qText = "Which state is this? ";
+
+            // TODO: 1) need to fix names with spaces
+            // TODO: Need to figure out a way to pull this from the json and Preload it 
+
+        }
+        else {
+            qText = "What is the capital of " + currentQuestion.name + "?";
+
+        }
+
+        Sprite questionSprite = currentQuestion.image;
+
+        questionText.text = qText;
+        questionImage.sprite = questionSprite;
+
+        questionImage.GetComponent<Image>().sprite = questionSprite;
+
+        // now find 4 other questions TODO make these into buttons
+        List<Question> answers = gc.answers;
+        answers.Add(currentQuestion);
+        answers = gc.Shuffle(answers);
+
+        //Logger.Log("The parent is " + answerButtonParent.ToString());
+
+        // Show as many buttons as the question has answers
+        for (int i = 0; i < answers.Count; i++) {
+            // get me another spawned button that isn't being used
+            GameObject answerButtonGameObject = answerButtonObjectPool.GetObject();
+
+            // Parent the buttons to the panel - will fall into vertical 
+            // layout group and be arranged correctly
+            answerButtonGameObject.transform.SetParent(answerButtonParent);
+
+
+            // add to the list of objects
+            answerButtonGameObjects.Add(answerButtonGameObject);
+
+            // Get the AnswerButton script attached
+            AnswerButton answerButton = answerButtonGameObject.GetComponent<AnswerButton>();
+            answerButton.question = answers[i];
+
+            if (gc.GetGameMode() == "states") {
+                answerButton.Setup(new AnswerData(answers[i].name));
+            }
+            else {
+                answerButton.Setup(new AnswerData(answers[i].capital));
+            }
+        }
+
+        //roundActive = true;
+    }
+
+    private void RemoveAllAnswerButtons() {
+        // Go through and return ALL answerButtons to object pool that are in use
+
+        while (answerButtonGameObjects.Count > 0) {
+            // Return to the pool and remove from List 
+            answerButtonObjectPool.ReturnObject(answerButtonGameObjects[0]);
+            answerButtonGameObjects.RemoveAt(0);
+        }
+    }
+
+    private void RemoveAllAnswersButCorrect()
+    {
+        Logger.Log("REMOVING ALL BUT CORRECT");
+
+        int cnt = 0;
+        int max = answerButtonGameObjects.Count;
+
+        // can't do a foreach and modify list in the process so use a while
+        while (cnt < max)
+        {
+            GameObject b = answerButtonGameObjects[cnt];
+            if (b.GetComponent<AnswerButton>().question.abbreviation != gc.currentQuestion.abbreviation)
+            {
+                int pos = answerButtonGameObjects.IndexOf(b);
+                answerButtonObjectPool.ReturnObject(b);
+                answerButtonGameObjects.RemoveAt(pos);
+
+            }
+            cnt++;
+        }
+    }
+
+    public void OnCorrectAnswer(int score)
+    {
+        ActivateAnswerAnimation();
+        UpdateScoreText();
+        ActivateScoreAnimation(score);
+    }
+
+    // Used for kicking off correct answer animation
     public void ActivateScoreAnimation(int score)
     {
         scoreAnimationText.text = "+" + score.ToString();
         Color c = scoreAnimationText.color;
         c.a = 1.0f;
         scoreAnimationText.color = c;
-        
+
         // Check this in case user keeps answering quickly while animation is active. 
         // Probably overkill but just leave it 
         if (!scoreAnimationActive)
@@ -209,8 +255,38 @@ public class DisplayController : MonoBehaviour {
         }
     }
 
+    public void ActivateAnswerAnimation()
+    {
+        if (gc.GetGameMode() == "capitals") {
+               answerAnimationText.text = gc.currentQuestion.capital.ToString();
+        }
+        else {
+            answerAnimationText.text = gc.currentQuestion.name.ToString();
+        }
+
+Color c = answerAnimationText.color;
+        c.a = 1.0f;
+        answerAnimationText.color = c;
+
+        // Check this in case user keeps answering quickly while animation is active. 
+        // Probably overkill but just leave it 
+        if (!answerAnimationActive)
+        {
+            answerAnimationActive = true;
+            answerAnimationDisplay.SetActive(true);
+        }
+    }
+
+    public void InactivateAnswerAnimation()
+    {
+        if (answerAnimationActive)
+        {
+            answerAnimationActive = false;
+            answerAnimationDisplay.SetActive(false);
+        }
+    }
+
     public void OnIncorrectAnswer(AnswerButton button) {
-		//ActivateScoreAnimation();
 		RemoveAnswerButton(button);
 	}
 
@@ -242,12 +318,6 @@ public class DisplayController : MonoBehaviour {
 	public void GamePause(bool gamePaused) {
 		pauseDisplay.SetActive(gamePaused);
 	}	
-
-    // TODO: this can eventually go away
-    /*public void Announce()
-    {
-        //Logger.Log("Announcing DisplayController");
-    } */
 
     public void LoadScene(string sceneName)
     {
