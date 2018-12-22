@@ -5,16 +5,13 @@ using System.Collections.Generic;
 using System.IO;
 
 public class DataController : MonoBehaviour {
-    private int roundSize = 2;           // This is how many questions per round
+    private bool testingMode = true;
+
+    private int roundSize;             // This is how many questions per round
 	public int numAnswers;             // This is how many answers we present to user
-
-    // TODO: Need to have this be determined by size 
-    // I think there's a bug where roundSize is > maxQuestions
-    private int maxQuestions = 3;  // This is just for testing purposes to get to end of round/game quicker
-
+    private int maxQuestions;          // This is just for testing purposes to get to end of round/game quicker
 
 	private StatesGameData[] statesData;
-	//private List<StatesGameData> roundData = new List<StatesGameData>();
 
 	public List<Question> questionData = new List<Question>();    // this is a list of all questions that is built from file
 
@@ -23,17 +20,25 @@ public class DataController : MonoBehaviour {
 	private PlayerProgress playerProgress;
 
 	private string statesGameDataFileName = "statesdata.json";
-	//private string capitalsGameDataFileName = "capitalsdata.json";
 
 	void Start () {
-        Logger.Log("DataController Start");
         DontDestroyOnLoad(gameObject);            // We want this to persist when we load new scenes
 
+        if (testingMode)
+        {
+            roundSize = 2;
+            maxQuestions = 6;
+        }
+        else
+        {
+            roundSize = 10;
+            maxQuestions = 50;
+        }
         numAnswers = Mathf.Min(5, maxQuestions);
 		LoadGameData();
 		LoadPlayerProgress();
 
-        //TODO: Once the main screen has more than just Play active, change this back to MenuScreenLandscape 
+        // TODO: Once the main screen has more than just Play active, change this back to MenuScreenLandscape 
         SceneManager.LoadScene("MenuScreen2Landscape");
  
     }
