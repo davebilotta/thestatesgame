@@ -6,8 +6,8 @@ public class CapitalsGameController : MonoBehaviour
 {
     GameController gameController;
     private DisplayController displayController;
-
-    public GameObject mainDisplay;
+    public GameObject loadingDisplay;
+    public GameObject pauseDisplay;
     public GameObject exitConfirmation;
 
     public Text pauseText;
@@ -97,6 +97,11 @@ public class CapitalsGameController : MonoBehaviour
     {
         gameController.roundActive = false;
         gameController.gameActive = false;
+
+        exitConfirmation.SetActive(false);
+        pauseDisplay.SetActive(false);
+        loadingDisplay.SetActive(true);
+
         SceneManager.LoadScene("MenuScreen2Landscape");
     }
 

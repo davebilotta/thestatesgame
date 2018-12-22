@@ -7,7 +7,8 @@ public class StatesGameController : MonoBehaviour {
 	GameController gameController;
 	private DisplayController displayController;
 
-    public GameObject mainDisplay;
+    public GameObject loadingDisplay;
+    public GameObject pauseDisplay;
     public GameObject exitConfirmation;
 
     public Text roundOverText;
@@ -92,6 +93,11 @@ public class StatesGameController : MonoBehaviour {
     {
         gameController.roundActive = false;
         gameController.gameActive = false;
+        
+        exitConfirmation.SetActive(false);
+        pauseDisplay.SetActive(false);
+        loadingDisplay.SetActive(true);
+
         SceneManager.LoadScene("MenuScreen2Landscape");
     }
 

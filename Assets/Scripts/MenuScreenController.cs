@@ -14,6 +14,13 @@ public class MenuScreenController : MonoBehaviour {
         
     }
 
+    public void Start()
+    {
+        gc = FindObjectOfType<GameController>();
+        displayController = FindObjectOfType<DisplayController>();
+      
+    }
+
     public void LoadNextMenuScene() {
         displayController.LoadScene("MenuScreen2Landscape");
     }

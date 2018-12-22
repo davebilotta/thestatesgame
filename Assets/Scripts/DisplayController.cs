@@ -43,7 +43,7 @@ public class DisplayController : MonoBehaviour {
     }
 
     void Start () {
-        DontDestroyOnLoad(gameObject);
+     //   DontDestroyOnLoad(gameObject);
     }
 
     void Update()

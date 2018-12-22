@@ -2,7 +2,7 @@
 
 public static class Logger  {
 
-    private static bool loggingEnabled = true;
+    private static bool loggingEnabled = false;
 
 	public static void Log(string logMessage)
     {
