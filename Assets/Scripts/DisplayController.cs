@@ -133,19 +133,12 @@ public class DisplayController : MonoBehaviour {
 
         string qText;
 
-        // TODO: This should all be done when the level loads
-
-        // Build string for question and image depending on mode
+        // Build string for question depending on mode
         if (gc.GetGameMode() == "states") {
             qText = "Which state is this? ";
-
-            // TODO: 1) need to fix names with spaces
-            // TODO: Need to figure out a way to pull this from the json and Preload it 
-
         }
         else {
             qText = "What is the capital of " + currentQuestion.name + "?";
-
         }
 
         Sprite questionSprite = currentQuestion.image;
@@ -159,8 +152,6 @@ public class DisplayController : MonoBehaviour {
         List<Question> answers = gc.answers;
         answers.Add(currentQuestion);
         answers = gc.Shuffle(answers);
-
-        //Logger.Log("The parent is " + answerButtonParent.ToString());
 
         // Show as many buttons as the question has answers
         for (int i = 0; i < answers.Count; i++) {
@@ -264,7 +255,7 @@ public class DisplayController : MonoBehaviour {
             answerAnimationText.text = gc.currentQuestion.name.ToString();
         }
 
-Color c = answerAnimationText.color;
+        Color c = answerAnimationText.color;
         c.a = 1.0f;
         answerAnimationText.color = c;
 
@@ -313,7 +304,6 @@ Color c = answerAnimationText.color;
 			cnt++;
 		}
 	}
-
 	
 	public void GamePause(bool gamePaused) {
 		pauseDisplay.SetActive(gamePaused);
@@ -329,8 +319,7 @@ Color c = answerAnimationText.color;
         scoreAnimationActive = false;
         UnloadRoundImages();
     }
-
-
+    
     public string getImagePath(Question q)
     {
         string imagePath = "";
@@ -373,30 +362,4 @@ Color c = answerAnimationText.color;
         }
     }
 
-    /*public List<Question> FindOtherQuestions(Question q,int n) {
-		// Given a question, find n other Questions that do not match
-
-		List<Question> fullQuestionList = dataController.questionData;
-		List<Question> questionList = new List<Question>();
-		Question tempQuestion = new Question();
-
-		for (int i = 0; i < n; i ++) {
-			bool found = false;
-			while (!found) {
-				// get a random one 
-
-				tempQuestion = fullQuestionList[Random.Range(0,fullQuestionList.Count)];
-				// if doesn't match q and is not already in list, set found to True 
-				// otherwise do nothing
-				if (tempQuestion.abbreviation != q.abbreviation && !questionList.Contains(tempQuestion)) {
-					found = true;
-				}
-			}
-
-			questionList.Add(tempQuestion);
-
-		}
-
-		return questionList;
-	}*/
 }

@@ -54,20 +54,18 @@ public class GameController : MonoBehaviour {
 
 	void Start() 
 	{
-		Logger.Log("***** GAMECONTROLLER START *****");
 		dataController = FindObjectOfType<DataController>();
-
-		// TODO: Figure this out 
-		//questionPool = currentRoundData; // store questions we're going to be asking
-
+        
 	}
 	public void StartGame() {
-		Logger.Log("GAME IS NOW ACTIVE");
-		gameActive = true;
+       
+        gameActive = true;
 		playerScore = 0;
 		roundNumber = -1;
 		perfectGame = true;
         newHighScore = false;
+
+        dataController.BuildRoundData();
 	}
 
 	public void StartRound() 
@@ -79,7 +77,7 @@ public class GameController : MonoBehaviour {
 		perfectRound = true;
 
 		roundNumber++;
-		Logger.Log("Starting round " + roundNumber + ", Perfect Game =" + perfectGame.ToString());
+		//Logger.Log("Starting round " + roundNumber + ", Perfect Game =" + perfectGame.ToString());
 		
 		currentRoundData = dataController.getCurrentRoundData(roundNumber);
 
@@ -102,8 +100,6 @@ public class GameController : MonoBehaviour {
 
 	private void NextQuestion() 
 	{
-		// TODO: Do we increment here? 
-
 		// Get question 
 		currentQuestion = questionPool[questionIndex]; 
 
@@ -136,8 +132,7 @@ public class GameController : MonoBehaviour {
             // ***** CORRECT ANSWER *****
             if (button.question == currentQuestion)
             {
-                //Logger.Log("CORRECT!");
-
+               
                 // Score for each button left (if you get it on the first try it's 5, if there were 2 incorrect guesses it's 3, etc.)
                 int score = displayController.GetNumAnswersRemaining() * pointsPerButtonRemaining;
                 roundScore += score;
@@ -148,13 +143,13 @@ public class GameController : MonoBehaviour {
                 // Do we still have questions left?
                 if (questionPool.Length > questionIndex + 1)
                 {
-                    Logger.Log("Still have more questions " + questionPool.Length + " " + questionIndex);
+                    //Logger.Log("Still have more questions " + questionPool.Length + " " + questionIndex);
                     questionIndex++;
                     NextQuestion();
                 }
                 else
                 {
-                    Logger.Log("Checking round number " + roundNumber + " " + dataController.roundData.Count);
+                    //Logger.Log("Checking round number " + roundNumber + " " + dataController.roundData.Count);
                     if (roundNumber >= (dataController.roundData.Count - 1))
                     {
                         EndGame();
@@ -208,7 +203,6 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void EndGame() {
-		Logger.Log("GAME OVER");
 		roundActive = false;
 		gameActive = false;
         Logger.Log("Perfect Game = " + perfectGame);
@@ -220,25 +214,18 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void ReturnToMenu() {
-        // TODO: This needs changes to use landscape mode
-		SceneManager.LoadScene("MenuScreenLandscape");
+       SceneManager.LoadScene("MenuScreenLandscape");
 	}
 
 	public void GamePause() {
-		Logger.Log("PAUSING GAME!");
 		displayController.GamePause(true);
 		gamePaused = true;
 	}
 
 	public void GameUnpause() {
-		Logger.Log("UNPAUSING GAME!");
 		displayController.GamePause(false);
 		gamePaused = false;
 	}
-
-	/*private void UpdateTimeRemainingDisplay() {
-		timeRemainingText.text = "Time Remaining: " + Mathf.Round(timeRemaining).ToString();
-	} */
 
 	public List<Question> FindOtherQuestions(Question q,int n) {
 		// Given a question, find n other Questions that do not match

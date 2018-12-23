@@ -52,11 +52,7 @@ private GameController gc;
         gc = FindObjectOfType<GameController>();
         scoreCountUpComplete = false;
 
-        // TODO: This may need some work - could potentially get a slow update if last frame was slow 
-        //       Have a hard-coded value? 
-
-        //framesRequired = (int)(scoreCountUpLength / Time.deltaTime);
-        framesRequired = 90;
+        framesRequired = 60;
         
         // Round Start Score 
         roundStartScoreNumMax = gc.roundStartScore;
@@ -88,25 +84,12 @@ private GameController gc;
         totalScoreNumMax = gc.playerScore;
         totalScoreNumInc = ((double)totalScoreNumMax / framesRequired);
 
-        /*Logger.Log("Here are the numbers");
-        Logger.Log("MAX: " + roundStartScoreNumMax + "/" +
-            roundScoreNumMax + "/" +
-            secondsRemainingBonusNumMax + "/" +
-            perfectRoundBonusNumMax + "/" +
-            totalScoreNumMax);
-
-        Logger.Log("INC: " + roundStartScoreNumInc + "/" +
-                roundScoreNumInc + "/" +
-                secondsRemainingBonusNumInc + "/" +
-                perfectRoundBonusNumInc + "/" +
-                totalScoreNumInc); */
     }
 
 	// Update is called once per frame
 	void Update () {
         if (!scoreCountUpComplete)
         {
-            //if (scoreCountUpTick < scoreCountUpLength)
             if (frameCount < framesRequired) 
             {
                 scoreCountUpTick += Time.deltaTime;
@@ -193,6 +176,6 @@ private GameController gc;
 	public void ReturnToMenu() {
         gc.roundActive = false;
         gc.gameActive = false;
-		SceneManager.LoadScene("MenuScreenLandscape");
+		SceneManager.LoadScene("MenuScreen2Landscape");
 	}
 }

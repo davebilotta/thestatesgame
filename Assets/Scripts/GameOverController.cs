@@ -51,7 +51,7 @@ public class GameOverController : MonoBehaviour {
             highScoreDisplay.SetActive(true);
         }
 
-        framesRequired = 90;
+        framesRequired = 60;
 
         // Game Score
         gameScoreNumMax = gc.totalRoundScore;
@@ -77,7 +77,6 @@ public class GameOverController : MonoBehaviour {
 	void Update () {
         if (!scoreCountUpComplete)
         {
-            //if (scoreCountUpTick < scoreCountUpLength)
             if (frameCount < framesRequired)
             {
                 scoreCountUpTick += Time.deltaTime;

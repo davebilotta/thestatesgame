@@ -19,7 +19,6 @@ public class CapitalsGameController : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
-        //Logger.Log("***** STATESGAME CONTROLLER AWAKE *****");
         DataController dataController = FindObjectOfType<DataController>();
         dataController.LoadGameDataForScene("capitals");
 
@@ -30,8 +29,6 @@ public class CapitalsGameController : MonoBehaviour
 
     void Start()
     {
-        //Logger.Log("***** STATESGAME CONTROLLER START *****");
-
         displayController = GetComponent<DisplayController>();
 
         gameController.displayController = displayController;

@@ -15,7 +15,7 @@ public class DataController : MonoBehaviour {
 
 	public List<Question> questionData = new List<Question>();    // this is a list of all questions that is built from file
 
-	public List<RoundData> roundData = new List<RoundData>();     // this is a list of all rounds (items above divided by roundSize) ... each item in list is a list of Questions
+	public List<RoundData> roundData;     // this is a list of all rounds (items above divided by roundSize) ... each item in list is a list of Questions
 
 	private PlayerProgress playerProgress;
 
@@ -44,10 +44,8 @@ public class DataController : MonoBehaviour {
     }
 
     public Question[] getCurrentRoundData(int roundNumber) {
-		// TODO: Check index out of range 
-		//return roundData[roundNumber];
-		// TODO: This needs to return an array of questions 
-		List<Question> qList = roundData[roundNumber].questionList;
+
+        List<Question> qList = roundData[roundNumber].questionList;
 		Question[] questionList = new Question[qList.Count];
 		int cnt = 0;
 		foreach (Question q in qList) {
@@ -100,16 +98,10 @@ public class DataController : MonoBehaviour {
         {
             Logger.Log("Reading for Android");
             WWW reader = new WWW(filePath);
-            //yield return www;
+            
             Logger.Log("Done with create");
-            //Logger.Log("error " + reader.error.ToString());
-
+            
             dataAsJson = reader.text;
-            /* while (!reader.isDone)
-            {
-                Logger.Log("Reading ...");
-                dataAsJson = reader.text;
-            } */
 
         }
         else
@@ -145,35 +137,45 @@ public class DataController : MonoBehaviour {
 						questionCount++;
 					}
 				}
-			} 
-
-			ShuffleQuestions();
-
-			// Now go through and divide up all of these questions into rounds
-			List<Question> questionList = new List<Question>();
-			foreach (Question q in questionData) {
-				questionList.Add(q);
-
-				if (questionList.Count >= roundSize) {
-					roundData.Add(new RoundData(questionList));
-					questionList = new List<Question>();
-						//.Clear();
-				}
 			}
 
-			// Handle leftover for cases where the full file doesn't have X * roundSize items 
-			if (questionList.Count > 0) {
-				roundData.Add(new RoundData(questionList));
-			}
-
-			//ShowRoundData();
-
+            // TODO: Remove this later 
+            //BuildRoundData();
+			
 		}
 
 		else {
 			Logger.LogError("Cannot load game data");	
 		}
 	}
+
+    public void BuildRoundData()
+    {
+        ShuffleQuestions();
+
+
+        // Now go through and divide up all of these questions into rounds
+        List<Question> questionList = new List<Question>();
+        roundData = new List<RoundData>();
+
+        foreach (Question q in questionData)
+        {
+            questionList.Add(q);
+
+            if (questionList.Count >= roundSize)
+            {
+                roundData.Add(new RoundData(questionList));
+                questionList = new List<Question>();
+                //.Clear();
+            }
+        }
+
+        // Handle leftover for cases where the full file doesn't have X * roundSize items 
+        if (questionList.Count > 0)
+        {
+            roundData.Add(new RoundData(questionList));
+        }
+    }
 
 	public void ShowRoundData() {
 		int cnt = 0;
